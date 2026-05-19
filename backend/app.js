@@ -7,6 +7,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import multer from 'multer';
 import path from 'path';
+import fs from 'node:fs'
 
 import pool from './db.js';
 import { requireAuth, requireAdmin } from './middleware/auth.js';
