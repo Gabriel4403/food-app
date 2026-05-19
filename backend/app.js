@@ -15,7 +15,9 @@ const app = express();
 
 app.use(cors({ origin: process.env.ALLOWED_ORIGIN }));
 app.use(bodyParser.json());
-app.use(express.static('public'));
+if (fs.existsSync('./public')) {
+  app.use(express.static('public'));
+}
 
 // Image upload config
 const storage = multer.diskStorage({
