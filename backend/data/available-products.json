@@ -1,0 +1,192 @@
+[
+  {
+    "id": "m1",
+    "name": "Classic Cheeseburger",
+    "price": "5.99",
+    "description": "Juicy beef patty with melted American cheese, fresh lettuce, tomato, and special sauce on a toasted bun.",
+    "image": "images/cheeseburger.jpg"
+  },
+  {
+    "id": "m2",
+    "name": "Crispy Chicken Sandwich",
+    "price": "6.49",
+    "description": "Golden-fried chicken breast with pickles and mayo on a brioche bun.",
+    "image": "images/chicken-sandwich.jpg"
+  },
+  {
+    "id": "m3",
+    "name": "Bacon Cheeseburger",
+    "price": "7.99",
+    "description": "A beef patty, four strips of crispy bacon, melted cheese, and tangy BBQ sauce.",
+    "image": "images/bacon.jpg"
+  },
+  {
+    "id": "m4",
+    "name": "Spicy Chicken Nuggets (10pc)",
+    "price": "4.99",
+    "description": "Crispy breaded chicken pieces with a kick of heat, served with your choice of dipping sauce.",
+    "image": "images/spicy-nuggets.jpg"
+  },
+  {
+    "id": "m5",
+    "name": "Loaded French Fries",
+    "price": "3.99",
+    "description": "Crispy fries topped with melted cheese, bacon bits, and green onions.",
+    "image": "images/loaded-fries.jpg"
+  },
+  {
+    "id": "m6",
+    "name": "BBQ Pulled Pork Sandwich",
+    "price": "6.99",
+    "description": "Slow-cooked pork shoulder smothered in house-made BBQ sauce, served with coleslaw.",
+    "image": "images/pulled-pork.jpg"
+  },
+  {
+    "id": "m7",
+    "name": "Fish Fillet Sandwich",
+    "price": "5.49",
+    "description": "Beer-battered cod filet with tartar sauce and lettuce on a sesame seed bun.",
+    "image": "images/fish-sandwich.jpg"
+  },
+  {
+    "id": "m8",
+    "name": "Veggie Burger",
+    "price": "6.29",
+    "description": "Plant-based patty with avocado, tomato, and vegan mayo on a whole wheat bun.",
+    "image": "images/veggie-burger.jpg"
+  },
+  {
+    "id": "m9",
+    "name": "Chicken Tenders Basket",
+    "price": "7.49",
+    "description": "Three crispy chicken tenders served with fries and honey mustard dipping sauce.",
+    "image": "images/chicken-tenders.jpg"
+  },
+  {
+    "id": "m10",
+    "name": "Breakfast Burrito",
+    "price": "4.99",
+    "description": "Scrambled eggs, cheese, potatoes, and choice of bacon or sausage wrapped in a flour tortilla.",
+    "image": "images/breakfast-burrito.jpg"
+  },
+  {
+    "id": "m11",
+    "name": "Philly Cheesesteak",
+    "price": "8.49",
+    "description": "Sliced ribeye steak with melted provolone, grilled onions, and peppers on a hoagie roll.",
+    "image": "images/philly-cheesesteak.jpg"
+  },
+  {
+    "id": "m12",
+    "name": "Chili Cheese Dog",
+    "price": "3.99",
+    "description": "All-beef hot dog topped with homemade chili and shredded cheddar cheese.",
+    "image": "images/chili-dog.jpg"
+  },
+  {
+    "id": "m13",
+    "name": "Buffalo Wings (6pc)",
+    "price": "5.99",
+    "description": "Crispy wings tossed in your choice of mild, hot, or BBQ sauce with celery sticks.",
+    "image": "images/buffalo-wings.jpg"
+  },
+  {
+    "id": "m14",
+    "name": "Mushroom Swiss Burger",
+    "price": "7.29",
+    "description": "Beef patty topped with sautéed mushrooms and melted Swiss cheese.",
+    "image": "images/mushroom-burger.jpg"
+  },
+  {
+    "id": "m15",
+    "name": "Onion Rings",
+    "price": "3.49",
+    "description": "Crispy beer-battered onion rings served with ranch dipping sauce.",
+    "image": "images/onion-rings.jpg"
+  },
+  {
+    "id": "m16",
+    "name": "Grilled Chicken Wrap",
+    "price": "6.99",
+    "description": "Grilled chicken strips with lettuce, tomato, and Caesar dressing in a spinach tortilla.",
+    "image": "images/chicken-wrap.jpg"
+  },
+  {
+    "id": "m17",
+    "name": "Nachos Supreme",
+    "price": "5.99",
+    "description": "Tortilla chips loaded with cheese, jalapeños, ground beef, sour cream, and guacamole.",
+    "image": "images/nachos.jpg"
+  },
+  {
+    "id": "m18",
+    "name": "Classic Hot Dog",
+    "price": "2.99",
+    "description": "All-beef frankfurter with ketchup, mustard, and relish on a toasted bun.",
+    "image": "images/hot-dog.jpg"
+  },
+  {
+    "id": "m19",
+    "name": "Avocado Turkey Club",
+    "price": "7.99",
+    "description": "Sliced turkey, bacon, avocado, lettuce, and tomato on toasted multigrain bread.",
+    "image": "images/turkey-club.jpg"
+  },
+  {
+    "id": "m20",
+    "name": "Chocolate Milkshake",
+    "price": "3.99",
+    "description": "Creamy vanilla ice cream blended with rich chocolate syrup and topped with whipped cream.",
+    "image": "images/chocolate-shake.jpg"
+  },
+  {
+    "id": "m21",
+    "name": "Pepperoni Classic",
+    "price": "12.99",
+    "description": "Our signature pizza with double pepperoni, extra mozzarella, and tangy tomato sauce on a crispy crust.",
+    "image": "images/pepperoni-pizza.jpg"
+  },
+  {
+    "id": "m22",
+    "name": "Hawaiian Paradise",
+    "price": "14.99",
+    "description": "Sweet pineapple, smoked ham, and mozzarella cheese blend on our garlic butter crust.",
+    "image": "images/hawaiian-pizza.jpg"
+  },
+  {
+    "id": "m23",
+    "name": "Supreme Veggie",
+    "price": "13.99",
+    "description": "Loaded with bell peppers, mushrooms, red onions, black olives, and fresh tomatoes on whole wheat crust.",
+    "image": "images/veggie-pizza.jpg"
+  },
+  {
+    "id": "m24",
+    "name": "Quattro Carni",
+    "price": "16.99",
+    "description": "A meat lover's dream with four premium meats: spicy pepperoni, Italian sausage, smoked bacon, and honey-glazed ham, topped with mozzarella and Romano cheeses on our signature garlic-tomato sauce.",
+    "image": "images/quattro-carni-pizza.jpg"
+  },
+
+  {
+    "id": "m25",
+    "name": "Dragon Roll Platter",
+    "price": "18.99",
+    "description": "8-piece platter featuring eel, cucumber, and avocado topped with thin-sliced avocado in a dragon-scale pattern. Served with soy sauce, wasabi, and pickled ginger.",
+    "image": "images/dragon-roll.jpg"
+  },
+  {
+    "id": "m26",
+    "name": "Samurai Sashimi Combo",
+    "price": "22.99",
+    "description": "Chef's selection of 15 premium sashimi slices (tuna, salmon, yellowtail) arranged artfully with daikon radish and shiso leaves. Includes miso soup.",
+    "image": "images/sashimi-combo.jpg"
+  },
+  {
+    "id": "m27",
+    "name": "Tokyo Night Boat",
+    "price": "24.99",
+    "description": "Our signature 24-piece sushi boat featuring nigiri, rolls, and tempura. Includes 4 tuna nigiri, 4 salmon nigiri, California rolls, spicy scallop rolls, and 2 tempura shrimp rolls.",
+    "image": "images/sushi-boat.jpg"
+  }
+]
