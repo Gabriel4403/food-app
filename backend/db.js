@@ -4,15 +4,15 @@ import 'dotenv/config';
 let pool;
 
 if (process.env.DATABASE_URL) {
-  // Railway production
   pool = mysql.createPool({
     uri: process.env.DATABASE_URL,
     waitForConnections: true,
     connectionLimit: 10,
+    enableKeepAlive: true,
+    keepAliveInitialDelay: 0,
     ssl: { rejectUnauthorized: false },
   });
 } else {
-  // Local development
   pool = mysql.createPool({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
@@ -21,6 +21,8 @@ if (process.env.DATABASE_URL) {
     database: process.env.DB_NAME,
     waitForConnections: true,
     connectionLimit: 10,
+    enableKeepAlive: true,
+    keepAliveInitialDelay: 0,
   });
 }
 
