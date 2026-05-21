@@ -9,7 +9,7 @@ import jwt from 'jsonwebtoken';
 import multer from 'multer';
 import path from 'path';
 
-import pool from './db.js';
+import { getDb } from './db.js';
 import { requireAuth, requireAdmin } from './middleware/auth.js';
 
 process.on('unhandledRejection', (err) => {
@@ -42,7 +42,8 @@ app.post('/auth/login', async (req, res) => {
     if (!email || !password)
       return res.status(400).json({ message: 'Email and password required' });
 
-    const [rows] = await pool.execute('SELECT * FROM users WHERE email = ?', [email]);
+    const db = await getDb();
+    const [rows] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
     const user = rows[0];
     if (!user) return res.status(401).json({ message: 'Invalid credentials' });
 
@@ -68,12 +69,13 @@ app.post('/auth/register', async (req, res) => {
     if (!name || !email || !password)
       return res.status(400).json({ message: 'All fields required' });
 
-    const [existing] = await pool.execute('SELECT id FROM users WHERE email = ?', [email]);
+    const db = await getDb();
+    const [existing] = await db.execute('SELECT id FROM users WHERE email = ?', [email]);
     if (existing.length > 0)
       return res.status(409).json({ message: 'Email already in use' });
 
     const hash = await bcrypt.hash(password, 12);
-    await pool.execute(
+    await db.execute(
       'INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)',
       [name, email, hash, 'user']
     );
@@ -88,7 +90,8 @@ app.post('/auth/register', async (req, res) => {
 
 app.get('/products', async (req, res) => {
   try {
-    const [rows] = await pool.execute('SELECT * FROM products ORDER BY name');
+    const db = await getDb();
+    const [rows] = await db.execute('SELECT * FROM products ORDER BY name');
     res.json(rows);
   } catch (err) {
     console.error('Products error:', err.message);
@@ -98,7 +101,8 @@ app.get('/products', async (req, res) => {
 
 app.get('/products/:id', async (req, res) => {
   try {
-    const [rows] = await pool.execute('SELECT * FROM products WHERE id = ?', [req.params.id]);
+    const db = await getDb();
+    const [rows] = await db.execute('SELECT * FROM products WHERE id = ?', [req.params.id]);
     if (!rows[0]) return res.status(404).json({ message: 'Not found' });
     res.json(rows[0]);
   } catch (err) {
@@ -109,7 +113,8 @@ app.get('/products/:id', async (req, res) => {
 
 app.get('/categories/:category', async (req, res) => {
   try {
-    const [rows] = await pool.execute(
+    const db = await getDb();
+    const [rows] = await db.execute(
       'SELECT * FROM products WHERE category = ? ORDER BY name',
       [req.params.category]
     );
@@ -128,11 +133,12 @@ app.post('/products', requireAdmin, upload.single('image'), async (req, res) => 
     const id = 'p' + Date.now();
     const image = req.file ? `images/${req.file.filename}` : null;
 
-    await pool.execute(
+    const db = await getDb();
+    await db.execute(
       'INSERT INTO products (id, name, price, description, image, category) VALUES (?, ?, ?, ?, ?, ?)',
       [id, name, parseFloat(price), description || '', image, category || null]
     );
-    const [rows] = await pool.execute('SELECT * FROM products WHERE id = ?', [id]);
+    const [rows] = await db.execute('SELECT * FROM products WHERE id = ?', [id]);
     res.status(201).json(rows[0]);
   } catch (err) {
     console.error('Add product error:', err.message);
@@ -143,12 +149,13 @@ app.post('/products', requireAdmin, upload.single('image'), async (req, res) => 
 app.put('/products/:id', requireAdmin, upload.single('image'), async (req, res) => {
   try {
     const { name, price, description, category } = req.body;
-    const [existing] = await pool.execute('SELECT * FROM products WHERE id = ?', [req.params.id]);
+    const db = await getDb();
+    const [existing] = await db.execute('SELECT * FROM products WHERE id = ?', [req.params.id]);
     if (!existing[0]) return res.status(404).json({ message: 'Not found' });
 
     const image = req.file ? `images/${req.file.filename}` : existing[0].image;
 
-    await pool.execute(
+    await db.execute(
       'UPDATE products SET name=?, price=?, description=?, image=?, category=? WHERE id=?',
       [
         name || existing[0].name,
@@ -159,7 +166,7 @@ app.put('/products/:id', requireAdmin, upload.single('image'), async (req, res) 
         req.params.id,
       ]
     );
-    const [rows] = await pool.execute('SELECT * FROM products WHERE id = ?', [req.params.id]);
+    const [rows] = await db.execute('SELECT * FROM products WHERE id = ?', [req.params.id]);
     res.json(rows[0]);
   } catch (err) {
     console.error('Update product error:', err.message);
@@ -169,9 +176,10 @@ app.put('/products/:id', requireAdmin, upload.single('image'), async (req, res) 
 
 app.delete('/products/:id', requireAdmin, async (req, res) => {
   try {
-    const [existing] = await pool.execute('SELECT id FROM products WHERE id = ?', [req.params.id]);
+    const db = await getDb();
+    const [existing] = await db.execute('SELECT id FROM products WHERE id = ?', [req.params.id]);
     if (!existing[0]) return res.status(404).json({ message: 'Not found' });
-    await pool.execute('DELETE FROM products WHERE id = ?', [req.params.id]);
+    await db.execute('DELETE FROM products WHERE id = ?', [req.params.id]);
     res.json({ message: 'Deleted' });
   } catch (err) {
     console.error('Delete product error:', err.message);
@@ -193,13 +201,14 @@ app.post('/orders', async (req, res) => {
       return res.status(400).json({ message: 'Missing customer data.' });
 
     const id = randomUUID();
-    await pool.execute(
+    const db = await getDb();
+    await db.execute(
       'INSERT INTO orders (id, customer_name, customer_email, customer_street, customer_postal_code, customer_city) VALUES (?,?,?,?,?,?)',
       [id, c.name, c.email, c.street, c['postal-code'], c.city]
     );
 
     for (const item of order.items) {
-      await pool.execute(
+      await db.execute(
         'INSERT INTO order_items (order_id, product_id, product_name, product_price, quantity) VALUES (?,?,?,?,?)',
         [id, item.id, item.name, item.price, item.quantity]
       );
@@ -214,9 +223,10 @@ app.post('/orders', async (req, res) => {
 
 app.get('/orders', requireAdmin, async (req, res) => {
   try {
-    const [orders] = await pool.execute('SELECT * FROM orders ORDER BY created_at DESC');
+    const db = await getDb();
+    const [orders] = await db.execute('SELECT * FROM orders ORDER BY created_at DESC');
     for (const order of orders) {
-      const [items] = await pool.execute('SELECT * FROM order_items WHERE order_id = ?', [order.id]);
+      const [items] = await db.execute('SELECT * FROM order_items WHERE order_id = ?', [order.id]);
       order.items = items;
     }
     res.json(orders);

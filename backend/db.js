@@ -1,15 +1,32 @@
 import mysql from 'mysql2/promise';
 import 'dotenv/config';
 
-const pool = mysql.createPool({
-  uri: process.env.DATABASE_URL,
-  waitForConnections: true,
-  connectionLimit: 10,
-  enableKeepAlive: true,
-  keepAliveInitialDelay: 10000,
-  idleTimeout: 60000,
-  maxIdle: 10,
-  ssl: { rejectUnauthorized: false },
-});
+async function createConnection() {
+  const connection = await mysql.createConnection({
+    uri: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false },
+  });
 
-export default pool;
+  connection.on('error', async (err) => {
+    console.error('DB error:', err.message);
+    if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+      await createConnection();
+    }
+  });
+
+  return connection;
+}
+
+let db;
+
+export async function getDb() {
+  if (!db) {
+    db = await createConnection();
+  }
+  try {
+    await db.ping();
+  } catch {
+    db = await createConnection();
+  }
+  return db;
+}
