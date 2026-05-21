@@ -15,7 +15,6 @@ export async function getDb() {
 
   db = await mysql.createConnection({
     uri: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false },
     connectTimeout: 30000,
   });
 
