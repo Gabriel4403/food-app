@@ -265,7 +265,7 @@ function AdminPage() {
 
         {/* Orders Tab */}
         {activeTab === 'orders' && (
-          <div className="bg-white rounded-2xl shadow overflow-hidden">
+          <div className="bg-white rounded-2xl text-gray-900 shadow overflow-hidden">
             <h2 className="text-xl font-bold p-6 border-b">Orders</h2>
             {ordersLoading ? (
               <p className="text-center text-gray-500 p-6">Loading...</p>
