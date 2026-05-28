@@ -43,7 +43,7 @@ function RegisterPage() {
         )}
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           {[['Name','text','name'],['Email','email','email'],['Password','password','password']].map(([label, type, key]) => (
-            <label key={key} className="flex flex-col gap-1 font-semibold text-sm">
+            <label key={key} className="flex flex-col text-gray-500 gap-1 font-semibold text-sm">
               {label}
               <input
                 type={type} required
