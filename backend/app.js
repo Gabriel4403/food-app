@@ -8,6 +8,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import multer from 'multer';
 import path from 'path';
+import { mkdirSync } from 'node:fs';
 
 import { getDb } from './db.js';
 import { requireAuth, requireAdmin } from './middleware/auth.js';
@@ -24,6 +25,8 @@ app.use(bodyParser.json());
 if (fs.existsSync('./public')) {
   app.use(express.static('public'));
 }
+
+mkdirSync('public/images', { recursive: true });
 
 const storage = multer.diskStorage({
   destination: 'public/images/',
@@ -235,6 +238,7 @@ app.get('/orders', requireAdmin, async (req, res) => {
     res.status(500).json({ message: 'Database error' });
   }
 });
+
 
 
 app.use((req, res) => {
