@@ -156,10 +156,10 @@ function AdminPage() {
         {/* Products Tab */}
         {activeTab === 'products' && (
           <>
-            <div className="bg-white rounded-2xl shadow p-6 mb-8">
+            <div className="bg-white rounded-2xl text-gray-900 shadow p-6 mb-8">
               <h2 className="text-xl font-bold mb-4">{editingId ? 'Edit product' : 'Add new product'}</h2>
               <form onSubmit={handleSave} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <label className="flex flex-col gap-1 text-sm font-semibold">
+                <label className="flex flex-col gap-1 text-gray-900 text-sm font-semibold">
                   Name *
                   <input required type="text"
                     className="border border-gray-300 rounded p-2 font-normal text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
@@ -167,7 +167,7 @@ function AdminPage() {
                     onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
                   />
                 </label>
-                <label className="flex flex-col gap-1 text-sm font-semibold">
+                <label className="flex flex-col text-gray-900 gap-1 text-sm font-semibold">
                   Price (USD) *
                   <input required type="number" step="0.01" min="0"
                     className="border border-gray-300 rounded p-2 font-normal text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
@@ -175,7 +175,7 @@ function AdminPage() {
                     onChange={e => setForm(f => ({ ...f, price: e.target.value }))}
                   />
                 </label>
-                <label className="flex flex-col gap-1 text-sm font-semibold md:col-span-2">
+                <label className="flex flex-col text-gray-900 gap-1 text-sm font-semibold md:col-span-2">
                   Description
                   <textarea rows={3}
                     className="border border-gray-300 rounded p-2 font-normal text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none"
@@ -183,7 +183,7 @@ function AdminPage() {
                     onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
                   />
                 </label>
-                <label className="flex flex-col gap-1 text-sm font-semibold">
+                <label className="flex flex-col text-gray-900 gap-1 text-sm font-semibold">
                   Category
                   <select
                     className="border border-gray-300 rounded p-2 font-normal text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
@@ -239,7 +239,7 @@ function AdminPage() {
                         <td className="px-4 py-3">
                           {p.image && <img src={`${API_URL}/${p.image}`} alt={p.name} className="w-14 h-14 object-cover rounded-lg" />}
                         </td>
-                        <td className="px-4 py-3 font-semibold">{p.name}</td>
+                        <td className="px-4 py-3 text-gray-900 font-semibold">{p.name}</td>
                         <td className="px-4 py-3 text-amber-700 font-bold">{currencyFormatter.format(p.price)}</td>
                         <td className="px-4 py-3 text-gray-500 hidden md:table-cell max-w-xs truncate">{p.description}</td>
                         <td className="px-4 py-3">
