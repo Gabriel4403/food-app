@@ -235,23 +235,7 @@ app.get('/orders', requireAdmin, async (req, res) => {
     res.status(500).json({ message: 'Database error' });
   }
 });
-app.get('/setup-admin', async (req, res) => {
-  try {
-    const db = await getDb();
-    const hash = await bcrypt.hash('admin123', 12);
-    await db.execute(
-      'DELETE FROM users WHERE email = ?',
-      ['admin@foodapp.com']
-    );
-    await db.execute(
-      'INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)',
-      ['Admin', 'admin@foodapp.com', hash, 'admin']
-    );
-    res.json({ message: 'Admin created!' });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
+
 
 app.use((req, res) => {
   if (req.method === 'OPTIONS') return res.sendStatus(200);
