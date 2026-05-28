@@ -235,11 +235,6 @@ app.get('/orders', requireAdmin, async (req, res) => {
     res.status(500).json({ message: 'Database error' });
   }
 });
-
-app.use((req, res) => {
-  if (req.method === 'OPTIONS') return res.sendStatus(200);
-  res.status(404).json({ message: 'Not found' });
-});
 app.get('/setup-admin', async (req, res) => {
   try {
     const db = await getDb();
@@ -257,5 +252,11 @@ app.get('/setup-admin', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+app.use((req, res) => {
+  if (req.method === 'OPTIONS') return res.sendStatus(200);
+  res.status(404).json({ message: 'Not found' });
+});
+
 
 app.listen(5000, () => console.log('Server running on http://localhost:5000'));
