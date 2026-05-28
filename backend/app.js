@@ -133,7 +133,7 @@ app.post('/products', requireAdmin, upload.single('image'), async (req, res) => 
     const { name, price, description, category } = req.body;
     if (!name || !price) return res.status(400).json({ message: 'Name and price required' });
 
-    const id = 'p' + Date.now();
+    const id = 'p' + Date.now().toString().slice(-8);
     const image = req.file ? `images/${req.file.filename}` : null;
 
     const db = await getDb();
