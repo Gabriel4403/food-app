@@ -107,8 +107,8 @@ function OrderHistoryPage() {
               <div key={order.id} className="bg-white rounded-2xl shadow p-6">
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <p className="text-xs text-gray-400 font-mono">{order.id.slice(0, 8)}...</p>
-                    <p className="text-sm text-gray-500">{new Date(order.created_at).toLocaleDateString()}</p>
+                    <p className="text-xs text-stone-700  font-mono">{order.id.slice(0, 8)}...</p>
+                    <p className="text-sm text-stone-700 ">{new Date(order.created_at).toLocaleDateString()}</p>
                   </div>
                   <div className="text-right">
                     <p className="font-bold text-amber-700 text-lg">
@@ -129,7 +129,7 @@ function OrderHistoryPage() {
                   {order.items?.map((item, i) => (
                     <li key={i} className="py-2 flex justify-between text-sm">
                       <span>{item.quantity}x {item.product_name}</span>
-                      <span className="text-gray-500">{currencyFormatter.format(item.product_price * item.quantity)}</span>
+                      <span className="text-stone-700 ">{currencyFormatter.format(item.product_price * item.quantity)}</span>
                     </li>
                   ))}
                 </ul>
