@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import useHttp from "../hooks/useHttp";
+import { useState } from "react";
 import Button from "./Button";
 import Error from "./Error";
 import { clearCart, hideCheckout } from "../store/cartSlice";
@@ -11,27 +11,17 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
   currency: 'USD',
 });
 
-const requestConfig = {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-};
-
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 function Checkout() {
   const dispatch = useDispatch();
   const items = useSelector((state) => state.cart.items);
   const { progress } = useSelector((state) => state.cart);
+  const { token } = useSelector((state) => state.auth);
 
-  const {
-    data,
-    isLoading: isSending,
-    error,
-    sendRequest,
-    clearData,
-  } = useHttp(`${API_URL}/orders`, requestConfig);
+  const [isSending, setIsSending] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
 
   const cartTotal = items.reduce(
     (total, item) => total + item.quantity * item.price, 0
@@ -39,29 +29,42 @@ function Checkout() {
 
   function handleClose() {
     dispatch(hideCheckout());
-    clearData();
+    setSuccess(false);
+    setError(null);
   }
 
   function handleFinishOrder() {
     dispatch(hideCheckout());
     dispatch(clearCart());
-    clearData();
+    setSuccess(false);
+    setError(null);
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
+    setIsSending(true);
+    setError(null);
 
     const fd = new FormData(event.target);
     const customerData = Object.fromEntries(fd.entries());
 
-    sendRequest(
-      JSON.stringify({
-        order: {
-          items: items,
-          customer: customerData,
+    try {
+      const res = await fetch(`${API_URL}/orders`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
-      })
-    );
+        body: JSON.stringify({ order: { items, customer: customerData } }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+      setSuccess(true);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsSending(false);
+    }
   }
 
   let buttons = (
@@ -77,18 +80,12 @@ function Checkout() {
     buttons = <span>Sending order...</span>;
   }
 
-  if (data && !error) {
+  if (success) {
     return (
-      <Modal
-        open={progress === 'checkout'}
-        onClose={handleFinishOrder}
-      >
+      <Modal open={progress === 'checkout'} onClose={handleFinishOrder}>
         <h2>Success!</h2>
         <p>Your order was submitted successfully.</p>
-        <p>
-          We will get back to you with more details via email within the next
-          few minutes.
-        </p>
+        <p>We will get back to you with more details via email within the next few minutes.</p>
         <p className="flex justify-end gap-4">
           <Button type="button" onClick={handleFinishOrder}>Okay</Button>
         </p>

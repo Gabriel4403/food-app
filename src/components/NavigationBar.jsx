@@ -43,6 +43,9 @@ function NavigationBar() {
       <div className="flex gap-4 mt-4">
         <NavLink to="/" className={linkClass}>Home</NavLink>
         <NavLink to="/products" className={linkClass}>Products</NavLink>
+        {token && user?.role !== 'admin' && (
+  <NavLink to="/orders" className={linkClass}>My Orders</NavLink>
+)}
         <NavLink to="/aboutus" className={linkClass}>About Us</NavLink>
         {token && user?.role === 'admin' && (
           <NavLink to="/admin" className={linkClass}>Admin</NavLink>

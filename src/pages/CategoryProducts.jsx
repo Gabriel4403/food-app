@@ -27,7 +27,7 @@ function CategoryProducts() {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`${API_URL}/categories/${category}`)
+    fetch(`${API_URL}/products?category=${category}`)
       .then(res => res.json())
       .then(data => { setProducts(data); setLoading(false); })
       .catch(() => { setError('Failed to load products'); setLoading(false); });

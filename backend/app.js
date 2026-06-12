@@ -91,10 +91,20 @@ app.post('/auth/register', async (req, res) => {
 
 // ── Products ──────────────────────────────────────────────────────────────────
 
+// Fix 6: single /products endpoint with optional ?category= query param
 app.get('/products', async (req, res) => {
   try {
     const db = await getDb();
-    const [rows] = await db.execute('SELECT * FROM products ORDER BY name');
+    const { category } = req.query;
+    let rows;
+    if (category) {
+      [rows] = await db.execute(
+        'SELECT * FROM products WHERE category = ? ORDER BY name',
+        [category]
+      );
+    } else {
+      [rows] = await db.execute('SELECT * FROM products ORDER BY name');
+    }
     res.json(rows);
   } catch (err) {
     console.error('Products error:', err.message);
@@ -110,20 +120,6 @@ app.get('/products/:id', async (req, res) => {
     res.json(rows[0]);
   } catch (err) {
     console.error('Product error:', err.message);
-    res.status(500).json({ message: 'Database error' });
-  }
-});
-
-app.get('/categories/:category', async (req, res) => {
-  try {
-    const db = await getDb();
-    const [rows] = await db.execute(
-      'SELECT * FROM products WHERE category = ? ORDER BY name',
-      [req.params.category]
-    );
-    res.json(rows);
-  } catch (err) {
-    console.error('Category error:', err.message);
     res.status(500).json({ message: 'Database error' });
   }
 });
@@ -192,7 +188,7 @@ app.delete('/products/:id', requireAdmin, async (req, res) => {
 
 // ── Orders ────────────────────────────────────────────────────────────────────
 
-app.post('/orders', async (req, res) => {
+app.post('/orders', requireAuth, async (req, res) => {
   try {
     const { order } = req.body;
     if (!order || !order.items || order.items.length === 0)
@@ -206,8 +202,8 @@ app.post('/orders', async (req, res) => {
     const id = randomUUID();
     const db = await getDb();
     await db.execute(
-      'INSERT INTO orders (id, customer_name, customer_email, customer_street, customer_postal_code, customer_city) VALUES (?,?,?,?,?,?)',
-      [id, c.name, c.email, c.street, c['postal-code'], c.city]
+      'INSERT INTO orders (id, user_id, customer_name, customer_email, customer_street, customer_postal_code, customer_city) VALUES (?,?,?,?,?,?,?)',
+      [id, req.user.id, c.name, c.email, c.street, c['postal-code'], c.city]
     );
 
     for (const item of order.items) {
@@ -220,6 +216,25 @@ app.post('/orders', async (req, res) => {
     res.status(201).json({ message: 'Order created!' });
   } catch (err) {
     console.error('Order error:', err.message);
+    res.status(500).json({ message: 'Database error' });
+  }
+});
+
+// Fix 2: order history for logged in user
+app.get('/orders/my', requireAuth, async (req, res) => {
+  try {
+    const db = await getDb();
+    const [orders] = await db.execute(
+      'SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC',
+      [req.user.id]
+    );
+    for (const order of orders) {
+      const [items] = await db.execute('SELECT * FROM order_items WHERE order_id = ?', [order.id]);
+      order.items = items;
+    }
+    res.json(orders);
+  } catch (err) {
+    console.error('My orders error:', err.message);
     res.status(500).json({ message: 'Database error' });
   }
 });
@@ -239,12 +254,34 @@ app.get('/orders', requireAdmin, async (req, res) => {
   }
 });
 
-
+// Fix 7: popular products based on last orders
+app.get('/popular-products', async (req, res) => {
+  try {
+    const db = await getDb();
+    const [rows] = await db.execute(`
+      SELECT 
+        oi.product_id as id,
+        oi.product_name as name,
+        oi.product_price as price,
+        p.image,
+        p.category,
+        SUM(oi.quantity) as total_ordered
+      FROM order_items oi
+      LEFT JOIN products p ON p.id = oi.product_id
+      GROUP BY oi.product_id, oi.product_name, oi.product_price, p.image, p.category
+      ORDER BY total_ordered DESC
+      LIMIT 3
+    `);
+    res.json(rows);
+  } catch (err) {
+    console.error('Popular products error:', err.message);
+    res.status(500).json({ message: 'Database error' });
+  }
+});
 
 app.use((req, res) => {
   if (req.method === 'OPTIONS') return res.sendStatus(200);
   res.status(404).json({ message: 'Not found' });
 });
-
 
 app.listen(5000, () => console.log('Server running on http://localhost:5000'));
