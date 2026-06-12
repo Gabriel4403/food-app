@@ -29,19 +29,19 @@ function OrderHistoryPage() {
   }, [token, navigate]);
 
   // Fix 3: top ordered products for this user
-  const topProducts = orders
-    .flatMap(o => o.items || [])
-    .reduce((acc, item) => {
-      const existing = acc.find(i => i.product_id === item.product_id);
-      if (existing) {
-        existing.quantity += item.quantity;
-      } else {
-        acc.push({ ...item });
-      }
-      return acc;
-    }, [])
-    .sort((a, b) => b.quantity - a.quantity)
-    .slice(0, 3);
+  const topProducts = (Array.isArray(orders) ? orders : [])
+  .flatMap(o => o.items || [])
+  .reduce((acc, item) => {
+    const existing = acc.find(i => i.product_id === item.product_id);
+    if (existing) {
+      existing.quantity += item.quantity;
+    } else {
+      acc.push({ ...item });
+    }
+    return acc;
+  }, [])
+  .sort((a, b) => b.quantity - a.quantity)
+  .slice(0, 3);
 
   // Fix 1: order again
   function handleOrderAgain(order) {
