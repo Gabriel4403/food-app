@@ -278,7 +278,7 @@ function AdminPage() {
 
         {activeTab === 'orders' && (
           <div className="bg-white rounded-2xl shadow overflow-hidden">
-            <h2 className="text-xl font-bold p-6 border-b">Orders</h2>
+            <h2 className="text-xl font-bold text-stone-700 p-6 border-b">Orders</h2>
             {ordersLoading ? (
               <p className="text-center text-gray-500 p-6">Loading...</p>
             ) : orders.length === 0 ? (
