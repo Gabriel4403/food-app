@@ -34,10 +34,9 @@ function NavigationBar() {
           <LogoIcon width={50} height={50} />
           <h1 className="font-bold text-4xl text-[#EFEFEF]">Food App</h1>
         </div>
-        <div className="flex gap-2">
-          <button onClick={handleShowCart} className="p-2 border-2 text-2xl font-bold bg-[#312c1d] rounded-2xl transition hover:bg-amber-500 text-white">Cart</button>
-          <ShoppingCartIcon size="lg" itemCount={totalCartItems} />
-        </div>
+        <button onClick={handleShowCart} className="relative group p-1 rounded-2xl transition hover:scale-110">
+  <ShoppingCartIcon size="lg" itemCount={totalCartItems} />
+</button>
       </div>
 
       <div className="flex gap-4 mt-4">
