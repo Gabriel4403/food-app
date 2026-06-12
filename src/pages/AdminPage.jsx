@@ -11,10 +11,10 @@ function ProductModal({ form, setForm, onSave, onClose, editingId, saving, error
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg p-8">
-        <h2 className="text-xl font-bold mb-6">{editingId ? 'Edit Product' : 'Add New Product'}</h2>
+        <h2 className="text-xl text-stone-700 font-bold mb-6">{editingId ? 'Edit Product' : 'Add New Product'}</h2>
         {error && <div className="bg-red-100 text-red-700 rounded-lg p-3 mb-4 text-sm">{error}</div>}
         <form onSubmit={onSave} className="flex flex-col gap-4">
-          <label className="flex flex-col gap-1 text-sm font-semibold">
+          <label className="flex flex-col  text-stone-700 gap-1 text-sm font-semibold">
             Name *
             <input required type="text"
               className="border border-gray-300 rounded p-2 font-normal text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
@@ -22,7 +22,7 @@ function ProductModal({ form, setForm, onSave, onClose, editingId, saving, error
               onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
             />
           </label>
-          <label className="flex flex-col gap-1 text-sm font-semibold">
+          <label className="flex flex-col text-stone-700 gap-1 text-sm font-semibold">
             Price (USD) *
             <input required type="number" step="0.01" min="0"
               className="border border-gray-300 rounded p-2 font-normal text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
@@ -30,7 +30,7 @@ function ProductModal({ form, setForm, onSave, onClose, editingId, saving, error
               onChange={e => setForm(f => ({ ...f, price: e.target.value }))}
             />
           </label>
-          <label className="flex flex-col gap-1 text-sm font-semibold">
+          <label className="flex flex-col text-stone-700 gap-1 text-sm font-semibold">
             Description
             <textarea rows={3}
               className="border border-gray-300 rounded p-2 font-normal text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none"
@@ -38,7 +38,7 @@ function ProductModal({ form, setForm, onSave, onClose, editingId, saving, error
               onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
             />
           </label>
-          <label className="flex flex-col gap-1 text-sm font-semibold">
+          <label className="flex flex-col  text-stone-700 gap-1 text-sm font-semibold">
             Category
             <select
               className="border border-gray-300 rounded p-2 font-normal text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
@@ -51,7 +51,7 @@ function ProductModal({ form, setForm, onSave, onClose, editingId, saving, error
               <option value="">None</option>
             </select>
           </label>
-          <label className="flex flex-col gap-1 text-sm font-semibold">
+          <label className="flex flex-col gap-1 text-stone-700 text-sm font-semibold">
             Image {editingId && <span className="font-normal text-gray-400">(leave blank to keep current)</span>}
             <input type="file" accept="image/*"
               className="border border-gray-300 rounded p-1.5 font-normal text-gray-900"
@@ -59,10 +59,10 @@ function ProductModal({ form, setForm, onSave, onClose, editingId, saving, error
             />
           </label>
           <div className="flex gap-3 justify-end mt-2">
-            <button type="button" onClick={onClose}
-              className="text-gray-500 hover:text-gray-800 transition text-sm px-4 py-2">
-              Cancel
-            </button>
+           <button type="button" onClick={onClose}
+  className="px-6 py-2 rounded-lg font-bold text-[#312c1d] border-2 border-[#312c1d] hover:bg-[#312c1d] hover:text-white transition">
+  Cancel
+</button>
             <button type="submit" disabled={saving}
               className="bg-[#312c1d] text-white rounded px-6 py-2 font-bold transition hover:bg-amber-500 disabled:opacity-50">
               {saving ? 'Saving...' : editingId ? 'Save changes' : 'Add product'}
@@ -194,7 +194,7 @@ function AdminPage() {
       <div className="max-w-5xl mx-auto">
 
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-stone-900">Admin Panel</h1>
+          <h1 className="text-4xl font-bold text-white">Admin Panel</h1>
           <button
             onClick={() => { dispatch(logout()); navigate('/'); }}
             className="text-sm text-gray-500 hover:text-red-600 transition"
@@ -252,9 +252,9 @@ function AdminPage() {
                         <td className="px-4 py-3">
                           {p.image && <img src={`${API_URL}/${p.image}`} alt={p.name} className="w-14 h-14 object-cover rounded-lg" />}
                         </td>
-                        <td className="px-4 py-3 font-semibold">{p.name}</td>
+                        <td className="px-4 py-3 text-stone-700 font-semibold">{p.name}</td>
                         <td className="px-4 py-3 text-amber-700 font-bold">{currencyFormatter.format(p.price)}</td>
-                        <td className="px-4 py-3 text-gray-500 hidden md:table-cell max-w-xs truncate">{p.description}</td>
+                        <td className="px-4 py-3 text-stone-700 hidden md:table-cell max-w-xs truncate">{p.description}</td>
                         <td className="px-4 py-3">
                           <div className="flex gap-2 justify-center">
                             <button onClick={() => openEditModal(p)}

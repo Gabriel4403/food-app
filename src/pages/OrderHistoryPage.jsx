@@ -62,40 +62,42 @@ function OrderHistoryPage() {
   return (
     <div className="min-h-screen pt-[140px] pb-12 px-4">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-stone-900 mb-8">My Orders</h1>
+        <h1 className="text-4xl font-bold text-white mb-8">My Orders</h1>
 
         {reorderMsg && (
           <div className="bg-green-100 text-green-800 rounded-lg p-3 mb-6 text-sm">{reorderMsg}</div>
         )}
 
         {/* Fix 3: top ordered products */}
-        {topProducts.length > 0 && (
-          <div className="bg-white rounded-2xl shadow p-6 mb-8">
-            <h2 className="text-xl font-bold text-stone-700 mb-4">Your Most Ordered</h2>
-            <div className="flex gap-4 flex-wrap">
-              {topProducts.map((item, i) => (
-                <div key={i} className="bg-[#67AE6E] rounded-xl px-4 py-3 flex items-center gap-3">
-                  <span className="text-2xl text-stone-700 font-bold ">#{i + 1}</span>
-                  <div>
-                    <p className="font-semibold text-white">{item.product_name}</p>
-                    <p className="text-sm text-white/80">Ordered {item.quantity}x</p>
-                  </div>
-                  <button
-                    onClick={() => dispatch(addItem({
-                      id: item.product_id,
-                      name: item.product_name,
-                      price: item.product_price,
-                      quantity: 1,
-                    }))}
-                    className="ml-2 bg-[#312c1d] text-white text-xs rounded px-3 py-1.5 hover:bg-amber-500 transition"
-                  >
-                    Add
-                  </button>
-                </div>
-              ))}
+       {topProducts.length > 0 && (
+  <div className="bg-white rounded-2xl shadow p-6 mb-8">
+    <h2 className="text-xl font-bold text-stone-700 mb-4">Your Most Ordered</h2>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {topProducts.map((item, i) => (
+        <div key={i} className="bg-[#67AE6E] rounded-xl p-4 flex flex-col gap-3">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl text-stone-700 font-bold flex-shrink-0">#{i + 1}</span>
+            <div className="min-w-0">
+              <p className="font-semibold text-white truncate">{item.product_name}</p>
+              <p className="text-sm text-white/80">Ordered {item.quantity}x</p>
             </div>
           </div>
-        )}
+          <button
+            onClick={() => dispatch(addItem({
+              id: item.product_id,
+              name: item.product_name,
+              price: item.product_price,
+              quantity: 1,
+            }))}
+            className="w-full bg-[#312c1d] text-white text-xs rounded px-3 py-1.5 hover:bg-amber-500 transition"
+          >
+            Add
+          </button>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
 
         {orders.length === 0 ? (
           <div className="bg-white rounded-2xl shadow p-12 text-center">
@@ -107,9 +109,9 @@ function OrderHistoryPage() {
               <div key={order.id} className="bg-white rounded-2xl shadow p-6">
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <p className="text-xs text-stone-700  font-mono">{order.id.slice(0, 8)}...</p>
-                    <p className="text-sm text-stone-700 ">{new Date(order.created_at).toLocaleDateString()}</p>
-                  </div>
+  <p className="font-bold text-stone-900">Order from {new Date(order.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+  <p className="text-sm text-gray-500">{order.items?.length} item{order.items?.length !== 1 ? 's' : ''}</p>
+</div>
                   <div className="text-right">
                     <p className="font-bold text-amber-700 text-lg">
                       {currencyFormatter.format(
