@@ -50,7 +50,7 @@ function Cart() {
         {currencyFormatter.format(cartTotal)}
       </p>
       <div className="flex justify-end gap-4">
-        <Button className="p-1 bg-[#312c1d] rounded transition hover:bg-amber-500"  textOnly onClick={handleCloseCart}>
+        <Button className="p-1 bg-red-500 rounded transition hover:bg-red-800"  textOnly onClick={handleCloseCart}>
           Close
         </Button>
         {items.length > 0 && (

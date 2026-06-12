@@ -299,12 +299,12 @@ function AdminPage() {
                 <tbody>
                   {orders.map((order, i) => (
                     <tr key={order.id} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                      <td className="px-4 py-3 font-mono text-xs text-gray-500">{order.id.slice(0, 8)}...</td>
-                      <td className="px-4 py-3 font-semibold">{order.customer_name}</td>
-                      <td className="px-4 py-3 text-gray-500">{order.customer_email}</td>
-                      <td className="px-4 py-3">{order.customer_city}</td>
-                      <td className="px-4 py-3">
-                        <ul className="text-xs text-gray-600">
+                      <td className="px-4 py-3  font-mono text-xs text-stone-700">{order.id.slice(0, 8)}...</td>
+                      <td className="px-4 py-3 text-stone-700 font-semibold">{order.customer_name}</td>
+                      <td className="px-4 py-3 text-stone-700">{order.customer_email}</td>
+                      <td className="px-4 py-3 text-stone-700">{order.customer_city}</td>
+                      <td className="px-4 py-3 text-stone-700">
+                        <ul className="text-xs text-stone-700">
                           {order.items?.map((item, j) => (
                             <li key={j}>{item.quantity}x {item.product_name}</li>
                           ))}
@@ -315,7 +315,7 @@ function AdminPage() {
                           order.items?.reduce((sum, item) => sum + item.product_price * item.quantity, 0) || 0
                         )}
                       </td>
-                      <td className="px-4 py-3 text-gray-500 text-xs">
+                      <td className="px-4 py-3 text-stone-700text-xs">
                         {new Date(order.created_at).toLocaleDateString()}
                       </td>
                     </tr>
@@ -342,7 +342,7 @@ function AdminPage() {
       {deleteConfirm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl p-8 shadow-xl max-w-sm w-full mx-4">
-            <h3 className="text-lg font-bold mb-2">Delete product?</h3>
+            <h3 className="text-lg text-stone-700 font-bold mb-2">Delete product?</h3>
             <p className="text-gray-600 text-sm mb-6">This cannot be undone.</p>
             <div className="flex gap-3 justify-end">
               <button onClick={() => setDeleteConfirm(null)} className="bg-[#312c1d] text-white rounded px-6 py-2   hover:bg-amber-500  text-sm">Cancel</button>

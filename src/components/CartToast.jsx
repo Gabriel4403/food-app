@@ -5,7 +5,15 @@ let toastId = 0;
 
 function CartToast() {
   const lastAdded = useSelector(state => state.cart.lastAdded);
+  const progress = useSelector(state => state.cart.progress);
   const [toasts, setToasts] = useState([]);
+
+  // Clear all toasts when cart opens
+  useEffect(() => {
+    if (progress === 'cart' || progress === 'checkout') {
+      setToasts([]);
+    }
+  }, [progress]);
 
   useEffect(() => {
     if (!lastAdded) return;
