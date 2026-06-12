@@ -71,11 +71,11 @@ function OrderHistoryPage() {
         {/* Fix 3: top ordered products */}
         {topProducts.length > 0 && (
           <div className="bg-white rounded-2xl shadow p-6 mb-8">
-            <h2 className="text-xl font-bold mb-4">Your Most Ordered</h2>
+            <h2 className="text-xl font-bold text-stone-700 mb-4">Your Most Ordered</h2>
             <div className="flex gap-4 flex-wrap">
               {topProducts.map((item, i) => (
                 <div key={i} className="bg-[#67AE6E] rounded-xl px-4 py-3 flex items-center gap-3">
-                  <span className="text-2xl font-bold text-white">#{i + 1}</span>
+                  <span className="text-2xl text-stone-700 font-bold ">#{i + 1}</span>
                   <div>
                     <p className="font-semibold text-white">{item.product_name}</p>
                     <p className="text-sm text-white/80">Ordered {item.quantity}x</p>
