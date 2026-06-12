@@ -345,7 +345,7 @@ function AdminPage() {
             <h3 className="text-lg font-bold mb-2">Delete product?</h3>
             <p className="text-gray-600 text-sm mb-6">This cannot be undone.</p>
             <div className="flex gap-3 justify-end">
-              <button onClick={() => setDeleteConfirm(null)} className="text-gray-600 hover:text-gray-900 text-sm">Cancel</button>
+              <button onClick={() => setDeleteConfirm(null)} className="text-gray-600 bg-red-600 hover:bg-red-800 text-sm">Cancel</button>
               <button onClick={() => handleDelete(deleteConfirm)}
                 className="bg-red-600 text-white rounded px-5 py-2 text-sm font-bold hover:bg-red-800 transition">
                 Delete
