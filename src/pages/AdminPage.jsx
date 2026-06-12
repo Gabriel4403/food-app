@@ -315,7 +315,7 @@ function AdminPage() {
                           order.items?.reduce((sum, item) => sum + item.product_price * item.quantity, 0) || 0
                         )}
                       </td>
-                      <td className="px-4 py-3 text-stone-700text-xs">
+                      <td className="px-4 py-3 text-stone-700 not-first:text-xs">
                         {new Date(order.created_at).toLocaleDateString()}
                       </td>
                     </tr>
