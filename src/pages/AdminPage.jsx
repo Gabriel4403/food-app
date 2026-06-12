@@ -7,6 +7,73 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 const currencyFormatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 const EMPTY_FORM = { name: '', price: '', description: '', image: null, category: 'burgers' };
 
+function ProductModal({ form, setForm, onSave, onClose, editingId, saving, error }) {
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg p-8">
+        <h2 className="text-xl font-bold mb-6">{editingId ? 'Edit Product' : 'Add New Product'}</h2>
+        {error && <div className="bg-red-100 text-red-700 rounded-lg p-3 mb-4 text-sm">{error}</div>}
+        <form onSubmit={onSave} className="flex flex-col gap-4">
+          <label className="flex flex-col gap-1 text-sm font-semibold">
+            Name *
+            <input required type="text"
+              className="border border-gray-300 rounded p-2 font-normal text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
+              value={form.name}
+              onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+            />
+          </label>
+          <label className="flex flex-col gap-1 text-sm font-semibold">
+            Price (USD) *
+            <input required type="number" step="0.01" min="0"
+              className="border border-gray-300 rounded p-2 font-normal text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
+              value={form.price}
+              onChange={e => setForm(f => ({ ...f, price: e.target.value }))}
+            />
+          </label>
+          <label className="flex flex-col gap-1 text-sm font-semibold">
+            Description
+            <textarea rows={3}
+              className="border border-gray-300 rounded p-2 font-normal text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none"
+              value={form.description}
+              onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
+            />
+          </label>
+          <label className="flex flex-col gap-1 text-sm font-semibold">
+            Category
+            <select
+              className="border border-gray-300 rounded p-2 font-normal text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
+              value={form.category}
+              onChange={e => setForm(f => ({ ...f, category: e.target.value }))}
+            >
+              <option value="burgers">Burgers & Sandwiches</option>
+              <option value="pizzas">Pizzas</option>
+              <option value="sushi">Sushi</option>
+              <option value="">None</option>
+            </select>
+          </label>
+          <label className="flex flex-col gap-1 text-sm font-semibold">
+            Image {editingId && <span className="font-normal text-gray-400">(leave blank to keep current)</span>}
+            <input type="file" accept="image/*"
+              className="border border-gray-300 rounded p-1.5 font-normal text-gray-900"
+              onChange={e => setForm(f => ({ ...f, image: e.target.files[0] || null }))}
+            />
+          </label>
+          <div className="flex gap-3 justify-end mt-2">
+            <button type="button" onClick={onClose}
+              className="text-gray-500 hover:text-gray-800 transition text-sm px-4 py-2">
+              Cancel
+            </button>
+            <button type="submit" disabled={saving}
+              className="bg-[#312c1d] text-white rounded px-6 py-2 font-bold transition hover:bg-amber-500 disabled:opacity-50">
+              {saving ? 'Saving...' : editingId ? 'Save changes' : 'Add product'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 function AdminPage() {
   const { token, user } = useSelector(s => s.auth);
   const dispatch = useDispatch();
@@ -18,11 +85,13 @@ function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [ordersLoading, setOrdersLoading] = useState(false);
   const [error, setError] = useState('');
+  const [modalError, setModalError] = useState('');
   const [form, setForm] = useState(EMPTY_FORM);
   const [editingId, setEditingId] = useState(null);
   const [saving, setSaving] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [successMsg, setSuccessMsg] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   const authHeaders = { Authorization: `Bearer ${token}` };
 
@@ -56,22 +125,31 @@ function AdminPage() {
     loadOrders();
   }, [token, user, navigate, loadProducts, loadOrders]);
 
-  function startEdit(product) {
-    setEditingId(product.id);
-    setForm({ name: product.name, price: product.price, description: product.description, image: null, category: product.category || 'burgers' });
-    setError('');
-  }
-
-  function cancelEdit() {
+  function openAddModal() {
     setEditingId(null);
     setForm(EMPTY_FORM);
-    setError('');
+    setModalError('');
+    setShowModal(true);
+  }
+
+  function openEditModal(product) {
+    setEditingId(product.id);
+    setForm({ name: product.name, price: product.price, description: product.description, image: null, category: product.category || 'burgers' });
+    setModalError('');
+    setShowModal(true);
+  }
+
+  function closeModal() {
+    setShowModal(false);
+    setEditingId(null);
+    setForm(EMPTY_FORM);
+    setModalError('');
   }
 
   async function handleSave(e) {
     e.preventDefault();
     setSaving(true);
-    setError('');
+    setModalError('');
     try {
       const fd = new FormData();
       fd.append('name', form.name);
@@ -89,10 +167,10 @@ function AdminPage() {
 
       setSuccessMsg(editingId ? 'Product updated!' : 'Product added!');
       setTimeout(() => setSuccessMsg(''), 3000);
-      cancelEdit();
+      closeModal();
       loadProducts();
     } catch (err) {
-      setError(err.message);
+      setModalError(err.message);
     } finally {
       setSaving(false);
     }
@@ -115,7 +193,6 @@ function AdminPage() {
     <div className="min-h-screen pt-[140px] pb-12 px-4">
       <div className="max-w-5xl mx-auto">
 
-        {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-stone-900">Admin Panel</h1>
           <button
@@ -126,25 +203,16 @@ function AdminPage() {
           </button>
         </div>
 
-        {/* Tabs */}
         <div className="flex gap-4 mb-8">
           <button
             onClick={() => setActiveTab('products')}
-            className={`px-6 py-2 rounded-lg font-bold transition ${
-              activeTab === 'products'
-                ? 'bg-[#312c1d] text-white'
-                : 'bg-white text-gray-600 hover:bg-gray-100'
-            }`}
+            className={`px-6 py-2 rounded-lg font-bold transition ${activeTab === 'products' ? 'bg-[#312c1d] text-white' : 'bg-white text-gray-600 hover:bg-gray-100'}`}
           >
             Products
           </button>
           <button
             onClick={() => setActiveTab('orders')}
-            className={`px-6 py-2 rounded-lg font-bold transition ${
-              activeTab === 'orders'
-                ? 'bg-[#312c1d] text-white'
-                : 'bg-white text-gray-600 hover:bg-gray-100'
-            }`}
+            className={`px-6 py-2 rounded-lg font-bold transition ${activeTab === 'orders' ? 'bg-[#312c1d] text-white' : 'bg-white text-gray-600 hover:bg-gray-100'}`}
           >
             Orders
           </button>
@@ -153,70 +221,15 @@ function AdminPage() {
         {successMsg && <div className="bg-green-100 text-green-800 rounded-lg p-3 mb-6 text-sm">{successMsg}</div>}
         {error && <div className="bg-red-100 text-red-700 rounded-lg p-3 mb-6 text-sm">{error}</div>}
 
-        {/* Products Tab */}
         {activeTab === 'products' && (
           <>
-            <div className="bg-white rounded-2xl text-gray-900 shadow p-6 mb-8">
-              <h2 className="text-xl font-bold mb-4">{editingId ? 'Edit product' : 'Add new product'}</h2>
-              <form onSubmit={handleSave} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <label className="flex flex-col gap-1 text-gray-900 text-sm font-semibold">
-                  Name *
-                  <input required type="text"
-                    className="border border-gray-300 rounded p-2 font-normal text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
-                    value={form.name}
-                    onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                  />
-                </label>
-                <label className="flex flex-col text-gray-900 gap-1 text-sm font-semibold">
-                  Price (USD) *
-                  <input required type="number" step="0.01" min="0"
-                    className="border border-gray-300 rounded p-2 font-normal text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
-                    value={form.price}
-                    onChange={e => setForm(f => ({ ...f, price: e.target.value }))}
-                  />
-                </label>
-                <label className="flex flex-col text-gray-900 gap-1 text-sm font-semibold md:col-span-2">
-                  Description
-                  <textarea rows={3}
-                    className="border border-gray-300 rounded p-2 font-normal text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none"
-                    value={form.description}
-                    onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-                  />
-                </label>
-                <label className="flex flex-col text-gray-900 gap-1 text-sm font-semibold">
-                  Category
-                  <select
-                    className="border border-gray-300 rounded p-2 font-normal text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
-                    value={form.category}
-                    onChange={e => setForm(f => ({ ...f, category: e.target.value }))}
-                  >
-                    <option value="burgers">Burgers & Sandwiches</option>
-                    <option value="pizzas">Pizzas</option>
-                    <option value="sushi">Sushi</option>
-                    <option value="">None</option>
-                  </select>
-                </label>
-                <label className="flex flex-col gap-1 text-sm font-semibold">
-                  Image {editingId && <span className="font-normal text-gray-400">(leave blank to keep current)</span>}
-                  <input type="file" accept="image/*"
-                    className="border border-gray-300 rounded p-1.5 font-normal text-gray-900"
-                    onChange={e => setForm(f => ({ ...f, image: e.target.files[0] || null }))}
-                  />
-                </label>
-                <div className="flex items-end gap-3 md:col-span-2">
-                  <button type="submit" disabled={saving}
-                    className="bg-[#312c1d] text-white rounded px-6 py-2 font-bold transition hover:bg-amber-500 disabled:opacity-50"
-                  >
-                    {saving ? 'Saving...' : editingId ? 'Save changes' : 'Add product'}
-                  </button>
-                  {editingId && (
-                    <button type="button" onClick={cancelEdit}
-                      className="text-gray-500 hover:text-gray-800 transition text-sm">
-                      Cancel
-                    </button>
-                  )}
-                </div>
-              </form>
+            <div className="flex justify-end mb-4">
+              <button
+                onClick={openAddModal}
+                className="bg-[#312c1d] text-white rounded-lg px-6 py-2 font-bold transition hover:bg-amber-500"
+              >
+                + Add Product
+              </button>
             </div>
 
             {loading ? (
@@ -239,12 +252,12 @@ function AdminPage() {
                         <td className="px-4 py-3">
                           {p.image && <img src={`${API_URL}/${p.image}`} alt={p.name} className="w-14 h-14 object-cover rounded-lg" />}
                         </td>
-                        <td className="px-4 py-3 text-gray-900 font-semibold">{p.name}</td>
+                        <td className="px-4 py-3 font-semibold">{p.name}</td>
                         <td className="px-4 py-3 text-amber-700 font-bold">{currencyFormatter.format(p.price)}</td>
                         <td className="px-4 py-3 text-gray-500 hidden md:table-cell max-w-xs truncate">{p.description}</td>
                         <td className="px-4 py-3">
                           <div className="flex gap-2 justify-center">
-                            <button onClick={() => startEdit(p)}
+                            <button onClick={() => openEditModal(p)}
                               className="bg-[#312c1d] text-white text-xs rounded px-3 py-1.5 hover:bg-amber-500 transition">
                               Edit
                             </button>
@@ -263,9 +276,8 @@ function AdminPage() {
           </>
         )}
 
-        {/* Orders Tab */}
         {activeTab === 'orders' && (
-          <div className="bg-white rounded-2xl text-gray-900 shadow overflow-hidden">
+          <div className="bg-white rounded-2xl shadow overflow-hidden">
             <h2 className="text-xl font-bold p-6 border-b">Orders</h2>
             {ordersLoading ? (
               <p className="text-center text-gray-500 p-6">Loading...</p>
@@ -287,9 +299,7 @@ function AdminPage() {
                 <tbody>
                   {orders.map((order, i) => (
                     <tr key={order.id} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                      <td className="px-4 py-3 font-mono text-xs text-gray-500">
-                        {order.id.slice(0, 8)}...
-                      </td>
+                      <td className="px-4 py-3 font-mono text-xs text-gray-500">{order.id.slice(0, 8)}...</td>
                       <td className="px-4 py-3 font-semibold">{order.customer_name}</td>
                       <td className="px-4 py-3 text-gray-500">{order.customer_email}</td>
                       <td className="px-4 py-3">{order.customer_city}</td>
@@ -317,7 +327,18 @@ function AdminPage() {
         )}
       </div>
 
-      {/* Delete confirmation */}
+      {showModal && (
+        <ProductModal
+          form={form}
+          setForm={setForm}
+          onSave={handleSave}
+          onClose={closeModal}
+          editingId={editingId}
+          saving={saving}
+          error={modalError}
+        />
+      )}
+
       {deleteConfirm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl p-8 shadow-xl max-w-sm w-full mx-4">

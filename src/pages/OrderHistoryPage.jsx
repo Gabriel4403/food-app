@@ -127,7 +127,7 @@ function OrderHistoryPage() {
                 </div>
                 <ul className="divide-y divide-gray-100">
                   {order.items?.map((item, i) => (
-                    <li key={i} className="py-2 flex justify-between text-sm">
+                    <li key={i} className="py-2 text-stone-700  flex justify-between text-sm">
                       <span>{item.quantity}x {item.product_name}</span>
                       <span className="text-stone-700 ">{currencyFormatter.format(item.product_price * item.quantity)}</span>
                     </li>
