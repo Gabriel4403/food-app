@@ -204,19 +204,27 @@ function AdminPage() {
         </div>
 
         <div className="flex gap-4 mb-8">
-          <button
-            onClick={() => setActiveTab('products')}
-            className={`px-6 py-2 rounded-lg font-bold  hover:bg-amber-500 transition ${activeTab === 'products' ? 'bg-[#312c1d] text-white' : 'bg-white text-gray-600 hover:bg-gray-100'}`}
-          >
-            Products
-          </button>
-          <button
-            onClick={() => setActiveTab('orders')}
-            className={`px-6 py-2 rounded-lg  hover:bg-amber-500 font-bold transition ${activeTab === 'orders' ? 'bg-[#312c1d] text-white' : 'bg-white text-gray-600 hover:bg-gray-100'}`}
-          >
-            Orders
-          </button>
-        </div>
+  <button
+    onClick={() => setActiveTab('products')}
+    className={`px-6 py-2 rounded-lg font-bold transition ${
+      activeTab === 'products'
+        ? 'bg-[#312c1d] text-white hover:bg-amber-500'
+        : 'bg-white text-gray-600 hover:bg-gray-100'
+    }`}
+  >
+    Products
+  </button>
+  <button
+    onClick={() => setActiveTab('orders')}
+    className={`px-6 py-2 rounded-lg font-bold transition ${
+      activeTab === 'orders'
+        ? 'bg-[#312c1d] text-white hover:bg-amber-500'
+        : 'bg-white text-gray-600 hover:bg-gray-100'
+    }`}
+  >
+    Orders
+  </button>
+</div>
 
         {successMsg && <div className="bg-green-100 text-green-800 rounded-lg p-3 mb-6 text-sm">{successMsg}</div>}
         {error && <div className="bg-red-100 text-red-700 rounded-lg p-3 mb-6 text-sm">{error}</div>}
