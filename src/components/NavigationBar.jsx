@@ -28,15 +28,16 @@ function NavigationBar() {
 
   return (
     <div className="absolute inset-x-0 top-0 border-2 min-h-[15%] bg-[#123524] flex flex-col items-center shadow-xl justify-center py-4 md:rounded-2xl">
-      <div className="w-full max-w-3xl flex items-center justify-between px-4 sm:px-8">
-  <div className="flex items-center justify-center gap-2 sm:gap-4">
-    <LogoIcon width={50} height={50} />
-    <h1 className="font-bold text-2xl sm:text-4xl text-[#EFEFEF]">Food App</h1>
-  </div>
-  <button onClick={handleShowCart} className="relative group p-1 rounded-2xl transition hover:scale-110">
-    <ShoppingCartIcon size="lg" itemCount={totalCartItems} />
-  </button>
-</div>
+      <div className="w-full flex items-center justify-between px-8">
+        <div className="w-12"></div>
+        <div className="flex items-center justify-center gap-4">
+          <LogoIcon width={50} height={50} />
+          <h1 className="font-bold text-4xl text-[#EFEFEF]">Food App</h1>
+        </div>
+        <button onClick={handleShowCart} className="relative group p-1 rounded-2xl transition hover:scale-110">
+  <ShoppingCartIcon size="lg" itemCount={totalCartItems} />
+</button>
+      </div>
 
       <div className="w-full max-w-5xl flex flex-wrap justify-center gap-3 mt-4 px-4">
         <NavLink to="/" className={linkClass}>Home</NavLink>
