@@ -209,7 +209,7 @@ function AdminPage() {
     className={`px-6 py-2 rounded-lg font-bold transition ${
       activeTab === 'products'
         ? 'bg-[#312c1d] text-white hover:bg-amber-500'
-        : 'bg-white text-gray-600 hover:bg-gray-100'
+        : 'bg-white text-gray-600 border border-gray-300 hover:bg-amber-500 hover:text-white hover:border-amber-500'
     }`}
   >
     Products
@@ -219,7 +219,7 @@ function AdminPage() {
     className={`px-6 py-2 rounded-lg font-bold transition ${
       activeTab === 'orders'
         ? 'bg-[#312c1d] text-white hover:bg-amber-500'
-        : 'bg-white text-gray-600 hover:bg-gray-100'
+        : 'bg-white text-gray-600 border border-gray-300 hover:bg-amber-500 hover:text-white hover:border-amber-500'
     }`}
   >
     Orders
