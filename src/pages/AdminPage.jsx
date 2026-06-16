@@ -206,13 +206,13 @@ function AdminPage() {
         <div className="flex gap-4 mb-8">
           <button
             onClick={() => setActiveTab('products')}
-            className={`px-6 py-2 rounded-lg font-bold transition ${activeTab === 'products' ? 'bg-[#312c1d] text-white' : 'bg-white text-gray-600 hover:bg-gray-100'}`}
+            className={`px-6 py-2 rounded-lg font-bold  hover:bg-amber-500 transition ${activeTab === 'products' ? 'bg-[#312c1d] text-white' : 'bg-white text-gray-600 hover:bg-gray-100'}`}
           >
             Products
           </button>
           <button
             onClick={() => setActiveTab('orders')}
-            className={`px-6 py-2 rounded-lg font-bold transition ${activeTab === 'orders' ? 'bg-[#312c1d] text-white' : 'bg-white text-gray-600 hover:bg-gray-100'}`}
+            className={`px-6 py-2 rounded-lg  hover:bg-amber-500 font-bold transition ${activeTab === 'orders' ? 'bg-[#312c1d] text-white' : 'bg-white text-gray-600 hover:bg-gray-100'}`}
           >
             Orders
           </button>
