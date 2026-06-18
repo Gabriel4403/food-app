@@ -47,7 +47,7 @@ function RegisterPage() {
               {label}
               <input
                 type={type} required
-                className="border border-gray-300 rounded p-2 font-normal text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                className="border border-gray-400 rounded p-2 font-normal text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
                 value={form[key]}
                 onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))}
               />

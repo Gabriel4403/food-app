@@ -28,7 +28,7 @@ function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen mt-36 sm:mt-50">
+    <div className="min-h-screen mt-50 sm:mt-50">
       <section className="relative bg-[#3F7D58] flex items-center justify-center text-white py-12 sm:py-0 sm:h-80">
         <div className="text-center px-4">
           <h1 className="text-3xl sm:text-5xl font-bold mb-4">Welcome to FoodApp</h1>

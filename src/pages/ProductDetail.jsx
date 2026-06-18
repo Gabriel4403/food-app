@@ -47,31 +47,31 @@ function ProductDetailPage() {
   }
 
   return (
-    <div className="min-h-screen pt-[140px] pb-12">
+    <div className="min-h-screen pt-50 sm:pt-[140px] pb-12 px-4 sm:px-0">
       <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden">
         <img
           src={`${API_URL}/${product.image}`}
           alt={product.name}
-          className="w-full h-80 object-cover"
+          className="w-full h-48 sm:h-80 object-cover"
         />
-        <div className="p-8">
-          <div className="flex justify-between items-start mb-4">
-            <h1 className="text-3xl font-bold text-stone-900">{product.name}</h1>
-            <span className="inline-block bg-[#312c1d] text-[#ffc404] text-lg font-bold px-6 py-2 rounded">
+        <div className="p-4 sm:p-8">
+          <div className="flex justify-between items-start mb-3 sm:mb-4 gap-3">
+            <h1 className="text-xl sm:text-3xl font-bold text-stone-900">{product.name}</h1>
+            <span className="inline-block shrink-0 bg-[#312c1d] text-[#ffc404] text-sm sm:text-lg font-bold px-3 sm:px-6 py-2 rounded">
               {currencyFormatter.format(product.price)}
             </span>
           </div>
-          <p className="text-gray-600 text-lg leading-relaxed mb-8">{product.description}</p>
-          <div className="flex gap-4">
+          <p className="text-gray-600 text-sm sm:text-lg leading-relaxed mb-6 sm:mb-8">{product.description}</p>
+          <div className="flex gap-3 sm:gap-4">
             <Button
-              className="bg-[#312c1d] rounded  cursor-pointer transition hover:bg-amber-500 p-3 text-lg"
+              className="bg-[#312c1d] rounded cursor-pointer transition hover:bg-amber-500 p-2 sm:p-3 text-sm sm:text-lg"
               onClick={handleAddToCart}
             >
               Add to Cart
             </Button>
             <Link
               to="/products"
-              className="px-4 py-3 rounded font-semibold text-[#3F7D58] border-2 border-[#3F7D58] hover:bg-[#3F7D58] hover:text-white transition"
+              className="px-3 sm:px-4 py-2 sm:py-3 rounded font-semibold text-sm sm:text-base text-[#3F7D58] border-2 border-[#3F7D58] hover:bg-[#3F7D58] hover:text-white transition"
             >
               ← Back to menu
             </Link>

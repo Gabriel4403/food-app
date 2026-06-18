@@ -2,7 +2,7 @@ import { FaLeaf, FaClock, FaHeart, FaAward, FaUtensils } from "react-icons/fa";
 
 export default function AboutPage() {
   return (
-     <div className="min-h-screen  mt-50 sm:mt-30  px-6 py-12 ">
+     <div className="min-h-screen  mt-40 sm:mt-30  px-6 py-12 ">
       <div className="max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-lg">
         <h1 className="text-4xl font-bold text-center text-[#3F7D58] mb-6">
           Our story

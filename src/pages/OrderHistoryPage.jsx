@@ -24,7 +24,7 @@ function OrderHistoryPage() {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
-      .then(data => { setOrders(data); setLoading(false); })
+      .then(data => { setOrders(Array.isArray(data) ? data : []); setLoading(false); })
       .catch(() => setLoading(false));
   }, [token, navigate]);
 
@@ -60,7 +60,7 @@ function OrderHistoryPage() {
   if (loading) return <p className="text-center mt-40 text-xl">Loading...</p>;
 
   return (
-    <div className="min-h-screen pt-[140px] pb-12 px-4">
+    <div className="min-h-screen pt-45 pb-12 px-4">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold text-white mb-8">My Orders</h1>
 
