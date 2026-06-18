@@ -91,7 +91,6 @@ app.post('/auth/register', async (req, res) => {
 
 // ── Products ──────────────────────────────────────────────────────────────────
 
-// Fix 6: single /products endpoint with optional ?category= query param
 app.get('/products', async (req, res) => {
   try {
     const db = await getDb();
@@ -220,7 +219,7 @@ app.post('/orders', requireAuth, async (req, res) => {
   }
 });
 
-// Fix 2: order history for logged in user
+
 app.get('/orders/my', requireAuth, async (req, res) => {
   try {
     const db = await getDb();
@@ -254,7 +253,7 @@ app.get('/orders', requireAdmin, async (req, res) => {
   }
 });
 
-// Fix 7: popular products based on last orders
+
 app.get('/popular-products', async (req, res) => {
   try {
     const db = await getDb();

@@ -89,7 +89,7 @@ function OrderHistoryPage() {
               price: item.product_price,
               quantity: 1,
             }))}
-            className="w-full bg-[#312c1d] text-white text-xs rounded px-3 py-1.5 hover:bg-amber-500 transition"
+            className="w-full bg-[#312c1d] text-white cursor-pointer text-xs rounded px-3 py-1.5 hover:bg-amber-500 transition"
           >
             Add
           </button>
@@ -121,7 +121,7 @@ function OrderHistoryPage() {
                     {/* Fix 1: order again button */}
                     <button
                       onClick={() => handleOrderAgain(order)}
-                      className="mt-2 bg-[#312c1d] text-white text-sm rounded px-4 py-1.5 hover:bg-amber-500 transition"
+                      className="mt-2 bg-[#312c1d] text-white cursor-pointer text-sm rounded px-4 py-1.5 hover:bg-amber-500 transition"
                     >
                       Order Again
                     </button>

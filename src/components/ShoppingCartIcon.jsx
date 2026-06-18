@@ -10,7 +10,7 @@ function ShoppingCartIcon({ size = "lg", itemCount }) {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 512 512"
-        className={`${sizeClasses[size] || sizeClasses.lg} transition-all duration-200 group-hover:scale-105`}
+        className={`${sizeClasses[size] || sizeClasses.lg} transition-all duration-200 cursor-pointer group-hover:scale-105`}
       >
         <circle cx="256.4" cy="255.8" fill="#ca6a46" r="256" id="ICON" />
         <path fill="#1f3049" d="M298.7 137.9h87.7v87.6h-87.7z" transform="rotate(-45.001 342.537 181.676)" />

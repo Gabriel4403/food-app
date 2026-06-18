@@ -64,7 +64,7 @@ function ProductDetailPage() {
           <p className="text-gray-600 text-lg leading-relaxed mb-8">{product.description}</p>
           <div className="flex gap-4">
             <Button
-              className="bg-[#312c1d] rounded transition hover:bg-amber-500 p-3 text-lg"
+              className="bg-[#312c1d] rounded  cursor-pointer transition hover:bg-amber-500 p-3 text-lg"
               onClick={handleAddToCart}
             >
               Add to Cart

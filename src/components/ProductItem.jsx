@@ -32,7 +32,7 @@ function ProductItem ({product}) {
           <p className="font-semibold mx-4 my-4">{product.description}</p>
         </div>
         <p className="mb-6">
-          <Button className="p-2 bg-[#312c1d] rounded transition hover:bg-amber-500 "  onClick={handleAddProductToCart}>Add to Cart</Button>
+          <Button className="p-2 bg-[#312c1d] rounded transition cursor-pointer hover:bg-amber-500 "  onClick={handleAddProductToCart}>Add to Cart</Button>
         </p>
       </article>
     </li>

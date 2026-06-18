@@ -59,7 +59,7 @@ function CategoryProducts() {
                 </div>
                 <p className="mb-4">
                   <Button
-                    className="p-2 bg-[#312c1d] rounded transition hover:bg-amber-500"
+                    className="p-2 bg-[#312c1d] rounded cursor-pointer transition hover:bg-amber-500"
                     onClick={() => dispatch(addItem(product))}
                   >
                     Add to Cart

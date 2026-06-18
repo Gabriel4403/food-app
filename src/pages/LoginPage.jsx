@@ -36,7 +36,7 @@ function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen pt-[140px] flex items-start justify-center px-4">
+    <div className="min-h-screen mt-50 sm:mt-40 flex items-start justify-center px-4">
       <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
         <h2 className="text-2xl font-bold text-stone-900 mb-6">Sign in</h2>
         {error && <p className="bg-red-100 text-red-700 rounded p-3 mb-4 text-sm">{error}</p>}
@@ -62,7 +62,7 @@ function LoginPage() {
           </label>
           <button
             type="submit" disabled={loading}
-            className="bg-[#312c1d] text-white rounded py-2 font-bold transition hover:bg-amber-500 disabled:opacity-50"
+            className="bg-[#312c1d] text-white rounded py-2 font-bold cursor-pointer transition hover:bg-amber-500 disabled:opacity-50"
           >
             {loading ? 'Signing in...' : 'Sign in'}
           </button>

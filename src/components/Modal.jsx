@@ -19,14 +19,18 @@ export default function Modal({ children, open, onClose }) {
     };
   }, [open]);
 
-  function handleCloseCart (event) {
-    if(event.target === dialog.current) {
-        onClose()
-    }
+  function handleCloseCart(event) {
+    const rect = dialog.current.getBoundingClientRect();
+    const clickedOutside =
+      event.clientX < rect.left ||
+      event.clientX > rect.right ||
+      event.clientY < rect.top ||
+      event.clientY > rect.bottom;
+    if (clickedOutside) onClose();
   }
 
   return createPortal(
-    <dialog 
+    <dialog
       ref={dialog}
       className=" bg-[#67AE6E] top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] absolute  p-8 inset-60 rounded-2xl shadow-lg backdrop:bg-black/50 w-full max-w-2xl"
       onClick={handleCloseCart}

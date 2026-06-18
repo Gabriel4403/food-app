@@ -28,8 +28,8 @@ function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen pt-[140px]">
-      <section className="relative h-80 bg-[#3F7D58] flex items-center justify-center text-white">
+    <div className="min-h-screen mt-50">
+      <section className="relative  bg-[#3F7D58] flex items-center justify-center text-white">
         <div className="text-center px-4">
           <h1 className="text-5xl font-bold mb-4">Welcome to FoodApp</h1>
           <p className="text-xl mb-8">Delicious meals delivered to your doorstep</p>
@@ -76,7 +76,7 @@ function HomePage() {
                     <h3 className="text-xl font-semibold text-gray-800">{item.name}</h3>
                     <p className="text-[#ffc404] font-bold mt-2">{currencyFormatter.format(item.price)}</p>
                     <button
-                      className="mt-4 bg-[#312c1d] rounded transition hover:bg-amber-500 text-white py-2 px-4"
+                      className="mt-4 bg-[#312c1d] rounded transition cursor-pointer hover:bg-amber-500 text-white py-2 px-4"
                       onClick={() => dispatch(addItem({ ...item, overview: item.name }))}
                     >
                       Add to Cart

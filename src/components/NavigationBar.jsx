@@ -52,7 +52,7 @@ function NavigationBar() {
         {token ? (
           <button
             onClick={() => { dispatch(logout()); dispatch(clearCart()); navigate('/'); }}
-            className="px-3 py-1 font-semibold rounded-md bg-white text-red-600 hover:bg-red-600 hover:text-white transition"
+            className="px-3 py-1 font-semibold rounded-md cursor-pointer bg-white text-red-600 hover:bg-red-600 hover:text-white transition"
           >
             Sign out
           </button>
