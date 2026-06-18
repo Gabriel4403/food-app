@@ -11,15 +11,16 @@ function Products() {
     isLoading,
     error,
   } = useHttp(`${API_URL}/products`, requestConfig, []);
+
   if (isLoading) {
-    return <p>Loading products...</p>;
+    return <p className="text-center mt-40 text-white text-xl">Loading products...</p>;
   }
   if (error) {
     return <Error title="Failed to load products" message={error} />;
   }
 
   return (
-    <ul className="w-[90%] max-w-[70rem] list-none pt-12 mt-20 top-20 mx-auto p-4 grid grid-cols-[repeat(auto-fit,_minmax(16rem,_1fr))] gap-4">
+    <ul className="w-[90%] max-w-[70rem] list-none pt-12 mt-20 top-20 mx-auto p-4 grid grid-cols-2 md:grid-cols-[repeat(auto-fit,_minmax(16rem,_1fr))] gap-4">
       {loadedProducts.map((product) => (
         <ProductItem key={product.id} product={product} />
       ))}

@@ -377,73 +377,73 @@ function AdminPage() {
         )}
 
         {activeTab === "orders" && (
-          <div className="bg-white rounded-2xl shadow overflow-hidden">
-            <h2 className="text-xl font-bold text-stone-700 p-6 border-b">
-              Orders
-            </h2>
-            {ordersLoading ? (
-              <p className="text-center text-gray-500 p-6">Loading...</p>
-            ) : orders.length === 0 ? (
-              <p className="text-center text-gray-500 p-6">No orders yet.</p>
-            ) : (
-              <table className="w-full text-sm">
-                <thead className="bg-[#123524] text-white">
-                  <tr>
-                    <th className="text-left px-4 py-3">Order ID</th>
-                    <th className="text-left px-4 py-3">Customer</th>
-                    <th className="text-left px-4 py-3">Email</th>
-                    <th className="text-left px-4 py-3">City</th>
-                    <th className="text-left px-4 py-3">Items</th>
-                    <th className="text-left px-4 py-3">Total</th>
-                    <th className="text-left px-4 py-3">Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {orders.map((order, i) => (
-                    <tr
-                      key={order.id}
-                      className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}
-                    >
-                      <td className="px-4 py-3  font-mono text-xs text-stone-700">
-                        {order.id.slice(0, 8)}...
-                      </td>
-                      <td className="px-4 py-3 text-stone-700 font-semibold">
-                        {order.customer_name}
-                      </td>
-                      <td className="px-4 py-3 text-stone-700">
-                        {order.customer_email}
-                      </td>
-                      <td className="px-4 py-3 text-stone-700">
-                        {order.customer_city}
-                      </td>
-                      <td className="px-4 py-3 text-stone-700">
-                        <ul className="text-xs text-stone-700">
-                          {order.items?.map((item, j) => (
-                            <li key={j}>
-                              {item.quantity}x {item.product_name}
-                            </li>
-                          ))}
-                        </ul>
-                      </td>
-                      <td className="px-4 py-3 font-bold text-amber-700">
-                        {currencyFormatter.format(
-                          order.items?.reduce(
-                            (sum, item) =>
-                              sum + item.product_price * item.quantity,
-                            0,
-                          ) || 0,
-                        )}
-                      </td>
-                      <td className="px-4 py-3 text-stone-700 not-first:text-xs">
-                        {new Date(order.created_at).toLocaleDateString()}
-                      </td>
-                    </tr>
+  <div className="bg-white rounded-2xl shadow overflow-hidden">
+    <h2 className="text-xl font-bold text-stone-700 p-6 border-b">
+      Orders
+    </h2>
+    {ordersLoading ? (
+      <p className="text-center text-gray-500 p-6">Loading...</p>
+    ) : orders.length === 0 ? (
+      <p className="text-center text-gray-500 p-6">No orders yet.</p>
+    ) : (
+      <table className="w-full text-sm">
+        <thead className="bg-[#123524] text-white">
+          <tr>
+            <th className="text-left px-4 py-3">Order ID</th>
+            <th className="text-left px-4 py-3">Customer</th>
+            <th className="text-left px-4 py-3">Email</th>
+            <th className="text-left px-4 py-3">City</th>
+            <th className="text-left px-4 py-3">Items</th>
+            <th className="text-left px-4 py-3">Total</th>
+            <th className="text-left px-4 py-3">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {orders.map((order, i) => (
+            <tr
+              key={order.id}
+              className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}
+            >
+              <td className="px-4 py-3  font-mono text-xs text-stone-700">
+                {order.id.slice(0, 8)}...
+              </td>
+              <td className="px-4 py-3 text-stone-700 font-semibold">
+                {order.customer_name}
+              </td>
+              <td className="px-4 py-3 text-stone-700">
+                {order.customer_email}
+              </td>
+              <td className="px-4 py-3 text-stone-700">
+                {order.customer_city}
+              </td>
+              <td className="px-4 py-3 text-stone-700">
+                <ul className="text-xs text-stone-700">
+                  {order.items?.map((item, j) => (
+                    <li key={j}>
+                      {item.quantity}x {item.product_name}
+                    </li>
                   ))}
-                </tbody>
-              </table>
-            )}
-          </div>
-        )}
+                </ul>
+              </td>
+              <td className="px-4 py-3 font-bold text-amber-700">
+                {currencyFormatter.format(
+                  order.items?.reduce(
+                    (sum, item) =>
+                      sum + item.product_price * item.quantity,
+                    0,
+                  ) || 0,
+                )}
+              </td>
+              <td className="px-4 py-3 text-stone-700 not-first:text-xs">
+                {new Date(order.created_at).toLocaleDateString()}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    )}
+  </div>
+)}
       </div>
 
       {showModal && (
