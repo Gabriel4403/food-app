@@ -20,7 +20,7 @@ function Products() {
   }
 
   return (
-     <ul className="w-[90%] max-w-[70rem] list-none pt-4 mt-40 sm:mt-44 mx-auto p-2 sm:p-4 grid grid-cols-2 md:grid-cols-[repeat(auto-fit,_minmax(16rem,_1fr))] gap-2 sm:gap-4">
+    <ul className="w-[100%] max-w-[80rem] list-none pt-4 mt-40 sm:mt-44 mx-auto p-0 sm:p-4 grid grid-cols-2 md:grid-cols-[repeat(auto-fit,_minmax(20rem,_1fr))] gap-2 sm:gap-4">
       {loadedProducts.map((product) => (
         <ProductItem key={product.id} product={product} />
       ))}

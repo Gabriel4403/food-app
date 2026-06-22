@@ -21,7 +21,7 @@ function ProductItem({ product }) {
     <li className="bg-[#67AE6E] rounded-2xl overflow-hidden text-center shadow-md">
       <article className="h-full flex flex-col justify-between">
         <Link to={`/products/${product.id}`}>
-          <img src={`${API_URL}/${product.image}`} alt={product.name} className="w-full h-36 sm:h-80 object-cover" />
+          <img src={`${API_URL}/${product.image}`} alt={product.name} className="w-full h-40 sm:h-80 object-cover" />
         </Link>
         <div>
           <h3 className="text-base sm:text-2xl font-bold mt-2 mb-1 px-1">{product.name}</h3>
