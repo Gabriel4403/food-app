@@ -14,10 +14,12 @@ const currencyFormatter = new Intl.NumberFormat("en-US", {
   currency: "USD",
 });
 
+// Cart modal — shows all items in the cart with quantity controls and a checkout button
 function Cart() {
   const dispatch = useDispatch();
   const { items, progress } = useSelector((state) => state.cart);
 
+  // Calculate total price of all items in the cart
   const cartTotal = items.reduce(
     (totalPrice, item) => totalPrice + item.quantity * item.price,
     0
@@ -50,9 +52,10 @@ function Cart() {
         {currencyFormatter.format(cartTotal)}
       </p>
       <div className="flex justify-end gap-4">
-        <Button className="p-1 bg-red-500 rounded transition hover:bg-red-800"  textOnly onClick={handleCloseCart}>
+        <Button className="p-1 bg-red-500 rounded transition hover:bg-red-800" textOnly onClick={handleCloseCart}>
           Close
         </Button>
+        {/* Only show checkout button if there are items in the cart */}
         {items.length > 0 && (
           <Button className="bg-[#312c1d] rounded transition hover:bg-amber-500 p-2" onClick={handleGoToCheckout}>Go to Checkout</Button>
         )}

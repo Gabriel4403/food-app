@@ -10,10 +10,12 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
   currency: 'USD',
 });
 
+// Home page — shows hero banner, category links, popular items from real orders, and feature highlights
 function HomePage() {
   const dispatch = useDispatch();
   const [popularItems, setPopularItems] = useState([]);
 
+  // Fetch the top 3 most ordered products to display in the Popular Items section
   useEffect(() => {
     fetch(`${API_URL}/popular-products`)
       .then(res => res.json())
@@ -29,6 +31,7 @@ function HomePage() {
 
   return (
     <div className="min-h-screen mt-50 sm:mt-50">
+      {/* Hero banner */}
       <section className="relative bg-[#3F7D58] flex items-center justify-center text-white py-12 sm:py-0 sm:h-60">
         <div className="text-center px-4">
           <h1 className="text-3xl sm:text-5xl font-bold mb-4">Welcome to FoodApp</h1>
@@ -42,6 +45,7 @@ function HomePage() {
         </div>
       </section>
 
+      {/* Category cards */}
       <section className="rounded-2xl py-8 sm:py-12 px-4 max-w-6xl mx-auto bg-white shadow-lg mt-8">
         <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8 text-stone-950">Our Categories</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
@@ -62,6 +66,7 @@ function HomePage() {
         </div>
       </section>
 
+      {/* Popular items — only shown if there are orders in the database */}
       {popularItems.length > 0 && (
         <section className="py-8 sm:py-12 px-4 bg-white rounded-2xl mt-2">
           <div className="max-w-6xl mx-auto">
@@ -89,6 +94,7 @@ function HomePage() {
         </section>
       )}
 
+      {/* Feature highlights */}
       <section className="py-8 sm:py-12 px-4 max-w-6xl mx-auto text-stone-950 bg-white rounded-2xl mt-2">
         <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8 text-stone-950">Why Choose Us?</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

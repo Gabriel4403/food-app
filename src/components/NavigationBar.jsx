@@ -6,6 +6,8 @@ import { showCart } from "../store/cartSlice";
 import { logout } from "../store/authSlice";
 import { clearCart } from "../store/cartSlice";
 
+// Top navigation bar — shows logo, cart icon, and nav links
+// Nav links adapt based on whether the user is logged in and their role
 function NavigationBar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -19,6 +21,7 @@ function NavigationBar() {
     dispatch(showCart());
   }
 
+  // Active link gets the orange highlight, inactive links get the green/white style
   const linkClass = ({ isActive }) =>
     `px-3 py-1 font-semibold rounded-md transition ${
       isActive
@@ -28,23 +31,27 @@ function NavigationBar() {
 
   return (
     <div className="absolute inset-x-0 top-0 border-2 min-h-[15%] bg-[#123524] flex flex-col items-center shadow-xl justify-center py-4">
+      {/* Logo centered, cart icon pinned to the right via absolute positioning */}
       <div className="relative w-full flex items-center justify-center py-2">
-  <div className="flex items-center gap-2 sm:gap-4">
-    <LogoIcon width={50} height={50} />
-    <h1 className="font-bold text-2xl sm:text-4xl text-[#EFEFEF]">Food App</h1>
-  </div>
-  <button onClick={handleShowCart} className="absolute right-4 group p-1 rounded-2xl transition hover:scale-110">
-    <ShoppingCartIcon size="lg" itemCount={totalCartItems} />
-  </button>
-</div>
+        <div className="flex items-center gap-2 sm:gap-4">
+          <LogoIcon width={50} height={50} />
+          <h1 className="font-bold text-2xl sm:text-4xl text-[#EFEFEF]">Food App</h1>
+        </div>
+        <button onClick={handleShowCart} className="absolute right-4 group p-1 rounded-2xl transition hover:scale-110">
+          <ShoppingCartIcon size="lg" itemCount={totalCartItems} />
+        </button>
+      </div>
 
+      {/* Nav links — wrap on mobile, centered on all sizes */}
       <div className="w-full max-w-5xl flex flex-wrap justify-center gap-3 mt-4 px-4">
         <NavLink to="/" className={linkClass}>Home</NavLink>
         <NavLink to="/products" className={linkClass}>Products</NavLink>
+        {/* My Orders only shown to logged-in non-admin users */}
         {token && user?.role !== 'admin' && (
           <NavLink to="/orders" className={linkClass}>My Orders</NavLink>
         )}
         <NavLink to="/aboutus" className={linkClass}>About Us</NavLink>
+        {/* Admin link only shown to admin users */}
         {token && user?.role === 'admin' && (
           <NavLink to="/admin" className={linkClass}>Admin</NavLink>
         )}

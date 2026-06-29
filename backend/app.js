@@ -13,21 +13,26 @@ import { mkdirSync } from 'node:fs';
 import { getDb } from './db.js';
 import { requireAuth, requireAdmin } from './middleware/auth.js';
 
+// Log unhandled promise rejections instead of crashing silently
 process.on('unhandledRejection', (err) => {
   console.error('Unhandled rejection:', err.message);
 });
 
 const app = express();
 
+// Allow requests only from the configured frontend origin (falls back to "*" for local dev)
 app.use(cors({ origin: process.env.ALLOWED_ORIGIN || '*' }));
 app.use(bodyParser.json());
 
+// Serve uploaded product images from the public folder
 if (fs.existsSync('./public')) {
   app.use(express.static('public'));
 }
 
+// Ensure the images directory exists on startup
 mkdirSync('public/images', { recursive: true });
 
+// Store uploaded images with a timestamp-based filename to avoid collisions
 const storage = multer.diskStorage({
   destination: 'public/images/',
   filename: (req, file, cb) => {
@@ -35,10 +40,12 @@ const storage = multer.diskStorage({
     cb(null, `${Date.now()}${ext}`);
   },
 });
+// Limit uploads to 5MB per image
 const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
 
 // ── Auth ──────────────────────────────────────────────────────────────────────
 
+// Login — verifies email/password and returns a signed JWT token valid for 8 hours
 app.post('/auth/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -50,6 +57,7 @@ app.post('/auth/login', async (req, res) => {
     const user = rows[0];
     if (!user) return res.status(401).json({ message: 'Invalid credentials' });
 
+    // Compare submitted password against the stored bcrypt hash
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) return res.status(401).json({ message: 'Invalid credentials' });
 
@@ -66,6 +74,7 @@ app.post('/auth/login', async (req, res) => {
   }
 });
 
+// Register — creates a new user account with a bcrypt-hashed password
 app.post('/auth/register', async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -77,6 +86,7 @@ app.post('/auth/register', async (req, res) => {
     if (existing.length > 0)
       return res.status(409).json({ message: 'Email already in use' });
 
+    // Hash the password with bcrypt before storing — never store plaintext passwords
     const hash = await bcrypt.hash(password, 12);
     await db.execute(
       'INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)',
@@ -91,6 +101,7 @@ app.post('/auth/register', async (req, res) => {
 
 // ── Products ──────────────────────────────────────────────────────────────────
 
+// GET all products, or filter by category using ?category=burgers query param
 app.get('/products', async (req, res) => {
   try {
     const db = await getDb();
@@ -111,6 +122,7 @@ app.get('/products', async (req, res) => {
   }
 });
 
+// GET a single product by ID
 app.get('/products/:id', async (req, res) => {
   try {
     const db = await getDb();
@@ -123,11 +135,13 @@ app.get('/products/:id', async (req, res) => {
   }
 });
 
+// Add a new product — admin only, accepts image upload via multipart/form-data
 app.post('/products', requireAdmin, upload.single('image'), async (req, res) => {
   try {
     const { name, price, description, category } = req.body;
     if (!name || !price) return res.status(400).json({ message: 'Name and price required' });
 
+    // Generate a short unique ID using the last 8 digits of the current timestamp
     const id = 'p' + Date.now().toString().slice(-8);
     const image = req.file ? `images/${req.file.filename}` : null;
 
@@ -144,6 +158,7 @@ app.post('/products', requireAdmin, upload.single('image'), async (req, res) => 
   }
 });
 
+// Update an existing product — admin only, keeps current image if no new one is uploaded
 app.put('/products/:id', requireAdmin, upload.single('image'), async (req, res) => {
   try {
     const { name, price, description, category } = req.body;
@@ -151,6 +166,7 @@ app.put('/products/:id', requireAdmin, upload.single('image'), async (req, res) 
     const [existing] = await db.execute('SELECT * FROM products WHERE id = ?', [req.params.id]);
     if (!existing[0]) return res.status(404).json({ message: 'Not found' });
 
+    // Keep the existing image path if no new image was uploaded
     const image = req.file ? `images/${req.file.filename}` : existing[0].image;
 
     await db.execute(
@@ -172,6 +188,7 @@ app.put('/products/:id', requireAdmin, upload.single('image'), async (req, res) 
   }
 });
 
+// Delete a product — admin only
 app.delete('/products/:id', requireAdmin, async (req, res) => {
   try {
     const db = await getDb();
@@ -187,6 +204,7 @@ app.delete('/products/:id', requireAdmin, async (req, res) => {
 
 // ── Orders ────────────────────────────────────────────────────────────────────
 
+// Place a new order — requires auth, validates customer data, saves order + line items
 app.post('/orders', requireAuth, async (req, res) => {
   try {
     const { order } = req.body;
@@ -194,6 +212,7 @@ app.post('/orders', requireAuth, async (req, res) => {
       return res.status(400).json({ message: 'Missing data.' });
 
     const c = order.customer;
+    // Basic validation — all customer fields must be present and email must contain @
     if (!c || !c.email?.includes('@') || !c.name?.trim() || !c.street?.trim() ||
         !c['postal-code']?.trim() || !c.city?.trim())
       return res.status(400).json({ message: 'Missing customer data.' });
@@ -205,6 +224,7 @@ app.post('/orders', requireAuth, async (req, res) => {
       [id, req.user.id, c.name, c.email, c.street, c['postal-code'], c.city]
     );
 
+    // Insert each cart item as a separate order_items row
     for (const item of order.items) {
       await db.execute(
         'INSERT INTO order_items (order_id, product_id, product_name, product_price, quantity) VALUES (?,?,?,?,?)',
@@ -219,7 +239,7 @@ app.post('/orders', requireAuth, async (req, res) => {
   }
 });
 
-
+// GET the logged-in user's own order history, newest first, with items attached
 app.get('/orders/my', requireAuth, async (req, res) => {
   try {
     const db = await getDb();
@@ -227,6 +247,7 @@ app.get('/orders/my', requireAuth, async (req, res) => {
       'SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC',
       [req.user.id]
     );
+    // Attach line items to each order
     for (const order of orders) {
       const [items] = await db.execute('SELECT * FROM order_items WHERE order_id = ?', [order.id]);
       order.items = items;
@@ -238,6 +259,7 @@ app.get('/orders/my', requireAuth, async (req, res) => {
   }
 });
 
+// GET all orders — admin only, newest first, with items attached
 app.get('/orders', requireAdmin, async (req, res) => {
   try {
     const db = await getDb();
@@ -253,7 +275,7 @@ app.get('/orders', requireAdmin, async (req, res) => {
   }
 });
 
-
+// GET the top 3 most ordered products based on total quantity across all orders
 app.get('/popular-products', async (req, res) => {
   try {
     const db = await getDb();
@@ -278,6 +300,7 @@ app.get('/popular-products', async (req, res) => {
   }
 });
 
+// Handle OPTIONS preflight requests and 404s for unknown routes
 app.use((req, res) => {
   if (req.method === 'OPTIONS') return res.sendStatus(200);
   res.status(404).json({ message: 'Not found' });

@@ -13,6 +13,8 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 const requestConfig = {};
 
+// Product detail page — fetches all products and finds the one matching the URL param
+// A dedicated /products/:id endpoint would be more efficient for large catalogues
 function ProductDetailPage() {
   const { productId } = useParams();
   const dispatch = useDispatch();

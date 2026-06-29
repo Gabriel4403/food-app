@@ -12,12 +12,14 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
+// Human-readable labels for each category slug
 const CATEGORY_LABELS = {
   burgers: 'Burgers & Sandwiches',
   pizzas: 'Pizzas',
   sushi: 'Sushi',
 };
 
+// Shows all products in a given category, fetched using the ?category= query param
 function CategoryProducts() {
   const { category } = useParams();
   const dispatch = useDispatch();
@@ -25,6 +27,7 @@ function CategoryProducts() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  // Re-fetch whenever the category route param changes
   useEffect(() => {
     setLoading(true);
     fetch(`${API_URL}/products?category=${category}`)

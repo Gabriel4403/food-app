@@ -6,6 +6,7 @@ import { loadUserCart } from '../store/cartSlice';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
+// Login page — authenticates the user and stores the JWT token in Redux + localStorage
 function LoginPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -26,7 +27,9 @@ function LoginPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
       dispatch(login(data));
+      // Load the user's saved cart from localStorage after login
       dispatch(loadUserCart());
+      // Redirect admin users to the admin panel, regular users to home
       navigate(data.user.role === 'admin' ? '/admin' : '/');
     } catch (err) {
       setError(err.message);
@@ -41,11 +44,11 @@ function LoginPage() {
         <h2 className="text-2xl font-bold text-stone-900 mb-6">Sign in</h2>
         {error && <p className="bg-red-100 text-red-700 rounded p-3 mb-4 text-sm">{error}</p>}
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <label className="flex flex-col gap-1  text-stone-900 font-semibold text-sm">
+          <label className="flex flex-col gap-1 text-stone-900 font-semibold text-sm">
             Email
             <input
               type="email" required
-              className="border border-gray-300  text-stone-900 rounded p-2 font-normal focus:outline-none focus:ring-2 focus:ring-amber-500"
+              className="border border-gray-300 text-stone-900 rounded p-2 font-normal focus:outline-none focus:ring-2 focus:ring-amber-500"
               value={form.email}
               onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
             />
@@ -54,7 +57,6 @@ function LoginPage() {
             Password
             <input
               type="password" required
-              
               className="border border-gray-300 rounded p-2 font-normal focus:outline-none focus:ring-2 focus:ring-amber-500"
               value={form.password}
               onChange={e => setForm(f => ({ ...f, password: e.target.value }))}

@@ -1,13 +1,14 @@
 import { useState, useEffect, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../store/authSlice";
+
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 const currencyFormatter = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "USD",
 });
+// Default empty state for the product add/edit form
 const EMPTY_FORM = {
   name: "",
   price: "",
@@ -16,6 +17,7 @@ const EMPTY_FORM = {
   category: "burgers",
 };
 
+// Modal for adding or editing a product — reused for both flows via editingId
 function ProductModal({ form, setForm, onSave, onClose, editingId, saving, error }) {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
@@ -86,9 +88,11 @@ function ProductModal({ form, setForm, onSave, onClose, editingId, saving, error
   );
 }
 
+// Admin panel — accessible only to users with role "admin"
+// Shows Products tab (CRUD table) and Orders tab (read-only table + mobile cards)
 function AdminPage() {
   const { token, user } = useSelector((s) => s.auth);
-  const dispatch = useDispatch();
+  
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState("products");
@@ -122,7 +126,7 @@ function AdminPage() {
   const loadOrders = useCallback(async () => {
     setOrdersLoading(true);
     try {
-      const res = await fetch(`${API_URL}/orders`, { headers: authHeaders });
+      const res = await fetch(`${API_URL}/orders`, { headers: { Authorization: `Bearer ${token}` } });
       setOrders(await res.json());
     } catch {
       setError("Failed to load orders");
@@ -131,6 +135,7 @@ function AdminPage() {
     }
   }, [token]);
 
+  // Redirect non-admins to login, load data on mount
   useEffect(() => {
     if (!token || user?.role !== "admin") { navigate("/login"); return; }
     loadProducts();
@@ -144,6 +149,7 @@ function AdminPage() {
     setShowModal(true);
   }
 
+  // Pre-fill form with existing product data when editing
   function openEditModal(product) {
     setEditingId(product.id);
     setForm({ name: product.name, price: product.price, description: product.description, image: null, category: product.category || "burgers" });
@@ -158,6 +164,7 @@ function AdminPage() {
     setModalError("");
   }
 
+  // Save a new or edited product — uses FormData to support image upload
   async function handleSave(e) {
     e.preventDefault();
     setSaving(true);
@@ -208,6 +215,7 @@ function AdminPage() {
           <h1 className="text-3xl sm:text-4xl font-bold text-white">Admin Panel</h1>
         </div>
 
+        {/* Tab switcher — Products or Orders */}
         <div className="flex gap-4 mb-8">
           <button onClick={() => setActiveTab("products")}
             className={`px-6 py-2 rounded-lg cursor-pointer font-bold transition ${
@@ -246,9 +254,11 @@ function AdminPage() {
                 <table className="w-full text-sm">
                   <thead className="bg-[#123524] text-white">
                     <tr>
+                      {/* Image column hidden on mobile to save space */}
                       <th className="text-left px-2 sm:px-4 py-3 hidden sm:table-cell">Image</th>
                       <th className="text-left px-2 sm:px-4 py-3">Name</th>
                       <th className="text-left px-2 sm:px-4 py-3">Price</th>
+                      {/* Description hidden on tablet and below */}
                       <th className="text-left px-2 sm:px-4 py-3 hidden md:table-cell">Description</th>
                       <th className="px-2 sm:px-4 py-3">Actions</th>
                     </tr>
@@ -295,7 +305,7 @@ function AdminPage() {
               <p className="text-center text-gray-500 p-6">No orders yet.</p>
             ) : (
               <>
-                {/* Desktop table */}
+                {/* Desktop table — hidden on mobile */}
                 <div className="hidden md:block">
                   <table className="w-full text-sm">
                     <thead className="bg-[#123524] text-white">
@@ -333,7 +343,7 @@ function AdminPage() {
                   </table>
                 </div>
 
-                {/* Mobile cards */}
+                {/* Mobile cards — shown below md: breakpoint instead of the table */}
                 <div className="md:hidden flex flex-col divide-y divide-gray-100">
                   {orders.map((order) => (
                     <div key={order.id} className="p-4">
@@ -370,6 +380,7 @@ function AdminPage() {
           editingId={editingId} saving={saving} error={modalError} />
       )}
 
+      {/* Delete confirmation modal */}
       {deleteConfirm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl p-8 shadow-xl max-w-sm w-full mx-4">

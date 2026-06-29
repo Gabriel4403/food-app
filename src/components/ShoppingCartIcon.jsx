@@ -1,3 +1,5 @@
+// Custom SVG cart icon with an item count badge
+// Size is controlled via the size prop ("sm", "md", "lg")
 function ShoppingCartIcon({ size = "lg", itemCount }) {
   const sizeClasses = {
     sm: "w-8 h-8",
@@ -34,6 +36,7 @@ function ShoppingCartIcon({ size = "lg", itemCount }) {
         <circle fill="#1f3049" cx="293" cy="368.3" r="6.3" />
         <circle fill="#e1e1e1" cx="293" cy="368.3" r="4.9" />
       </svg>
+      {/* Badge showing number of items — only visible when cart has items */}
       {itemCount > 0 && (
         <span className="absolute -top-1 -right-1 bg-[#EF9651] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
           {itemCount}

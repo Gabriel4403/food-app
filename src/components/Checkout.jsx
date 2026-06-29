@@ -13,6 +13,7 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
+// Checkout modal — collects customer details and submits the order to the backend
 function Checkout() {
   const dispatch = useDispatch();
   const items = useSelector((state) => state.cart.items);
@@ -33,6 +34,7 @@ function Checkout() {
     setError(null);
   }
 
+  // Clear the cart and close the modal after a successful order
   function handleFinishOrder() {
     dispatch(hideCheckout());
     dispatch(clearCart());
@@ -40,6 +42,8 @@ function Checkout() {
     setError(null);
   }
 
+  // Submit the order to the backend with customer details and cart items
+  // Includes the JWT token in the Authorization header if the user is logged in
   async function handleSubmit(event) {
     event.preventDefault();
     setIsSending(true);
@@ -80,6 +84,7 @@ function Checkout() {
     buttons = <span>Sending order...</span>;
   }
 
+  // Show success message after order is placed
   if (success) {
     return (
       <Modal open={progress === 'checkout'} onClose={handleFinishOrder}>
@@ -98,7 +103,6 @@ function Checkout() {
       <form onSubmit={handleSubmit}>
         <h2>Checkout</h2>
         <p>Total Amount: {currencyFormatter.format(cartTotal)}</p>
-
         <Input label="Full Name" type="text" id="name" />
         <Input label="E-Mail Address" type="email" id="email" />
         <Input label="Street" type="text" id="street" />
@@ -106,9 +110,7 @@ function Checkout() {
           <Input label="Postal Code" type="text" id="postal-code" />
           <Input label="City" type="text" id="city" />
         </div>
-
         {error && <Error title="Failed to submit order" message={error} />}
-
         <p className="flex justify-end gap-4">{buttons}</p>
       </form>
     </Modal>

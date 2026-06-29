@@ -10,6 +10,8 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
+// Product card shown in the grid on the Products page
+// Clicking the image navigates to the product detail page
 function ProductItem({ product }) {
   const dispatch = useDispatch();
 
@@ -28,6 +30,7 @@ function ProductItem({ product }) {
           <p className="inline-block bg-[#312c1d] text-[#ffc404] text-xs sm:text-sm font-bold px-4 sm:px-8 py-1.5 rounded mb-2 sm:mb-4">
             {currencyFormatter.format(product.price)}
           </p>
+          {/* Description hidden on mobile to keep cards compact */}
           <p className="font-semibold text-xs sm:text-base mx-2 sm:mx-4 my-2 sm:my-4 hidden sm:block">{product.description}</p>
         </div>
         <p className="mb-3 sm:mb-6">

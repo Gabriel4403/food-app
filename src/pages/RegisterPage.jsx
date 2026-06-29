@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
+// Registration page — creates a new user account and redirects to login after 3 seconds
 function RegisterPage() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: '', email: '', password: '' });
@@ -23,6 +24,7 @@ function RegisterPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
       setSuccess(true);
+      // Redirect to login after a short delay so the user sees the success message
       setTimeout(() => navigate('/login'), 3000);
     } catch (err) {
       setError(err.message);
@@ -32,7 +34,7 @@ function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen mt-50 sm:mt-40  flex items-start justify-center px-4">
+    <div className="min-h-screen mt-50 sm:mt-40 flex items-start justify-center px-4">
       <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
         <h2 className="text-2xl font-bold text-stone-900 mb-6">Create account</h2>
         {error && <p className="bg-red-100 text-red-700 rounded p-3 mb-4 text-sm">{error}</p>}
@@ -41,8 +43,9 @@ function RegisterPage() {
             Account created! Redirecting to login...
           </div>
         )}
+        {/* Fields are generated from an array to avoid repetitive JSX */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          {[['Name','text','name'],['Email','email','email'],['Password','password','password']].map(([label, type, key]) => (
+          {[['Name', 'text', 'name'], ['Email', 'email', 'email'], ['Password', 'password', 'password']].map(([label, type, key]) => (
             <label key={key} className="flex flex-col text-gray-500 gap-1 font-semibold text-sm">
               {label}
               <input
